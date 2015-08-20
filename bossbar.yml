@@ -8,7 +8,7 @@
 # Enabled: Should Bossbar broadcasting be enabled? (Note: this requires BossBarAPI!)                      #
 # Random: Should the order be randomized?                                                                 #
 # EnabledWorlds: The worlds in which this Broadcaster will be active                                      #
-# Interval: The interval between each messages                                                            #
+# Interval: The interval between each messages in ticks (1 second = 20 ticks)                             #
 # Permission: The permission a player needs to have to see the messages                                   #
 # Messages: The messages of this Broadcaster (Placeholders and Color codes (& symbol) work here)          #
 # You can add |%percentage here% to make it only display a percentage of the Boss Bar as full             #

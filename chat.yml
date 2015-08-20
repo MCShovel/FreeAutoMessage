@@ -9,7 +9,7 @@
 # Json: Should Json Chat formatting be enabled? (Note: requires Minecraft version 1.7!)                   #
 # Random: Should the order be randomized?                                                                 #
 # EnabledWorlds: The worlds in which this Broadcaster will be active                                      #
-# Interval: The interval between each messages                                                            #
+# Interval: The interval between each messages in ticks (1 second = 20 ticks)                             #
 # Permission: The permission a player needs to have to see the messages                                   #
 # Messages: The messages of this Broadcaster (Placeholders and Color codes (& symbol) work here)          #
 # You can use Json formatting in the messages                                                             #
