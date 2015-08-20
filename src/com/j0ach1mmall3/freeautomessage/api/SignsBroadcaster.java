@@ -82,6 +82,9 @@ public class SignsBroadcaster extends Broadcaster {
             count++;
         }
         for(String s : signs) {
+            if(getWorld(s) == null) {
+                continue;
+            }
             Block b = getWorld(s).getBlockAt(deserializeLocation(s));
             if(b.getState() instanceof Sign) {
                 Sign sign = (Sign) b.getState();
