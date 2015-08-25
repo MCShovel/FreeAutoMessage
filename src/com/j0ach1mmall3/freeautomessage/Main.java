@@ -39,7 +39,7 @@ public class Main extends JavaPlugin {
             if(config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "Successfully hooked into BossBarAPI for extended functionality", ChatColor.GREEN);
             bossBarAPI = true;
         } else {
-            if(config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "BossBarAPI was not found! Bossbar Broadcasters will not work!", ChatColor.RED);
+            if(config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "BossBarAPI was not found! Bossbar Broadcasters will not work!", ChatColor.GOLD);
             bossBarAPI = false;
         }
         if(config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "Loading configs...", ChatColor.GREEN);

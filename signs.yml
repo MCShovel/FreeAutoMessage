@@ -20,8 +20,7 @@ Enabled: true
 SignsBroadcasters:
   ExampleSignsBroadcaster:
     Random: false
-    Signs:
-    - world/0/0/0
+    Signs: []
     Interval: 600
     Messages:
     - '&1example message 1'
