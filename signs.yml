@@ -1,27 +1,19 @@
-# ####################################################################################################### #
-# FreeAutoMessage version 1.0.0 configuration                                                             #
-# Any help with this configuration should be requested here:                                              #
-# https://www.spigotmc.org/resources/free-auto-message.11191/                                             #
-# (c) 2015 j0ach1mmall3 - All rights reserved                                                             #
-# ####################################################################################################### #
-# CONFIGURATION DOCUMENTATION                                                                             #
-# Enabled: Should Signs broadcasting be enabled?                                                          #
-# Random: Should the order be randomized?                                                                 #
-# Signs: The signs on which this Broadcaster is active.                                                   #
-# This should not be touched unless you know what you're doing.                                           #
-# To add a Sign to this broadcaster, use /fam addsign %Broadcaster% while you are looking at it           #
-# To remove a Sign from this broadcaster, use /fam removesign %Broadcaster%                               #
-# Interval: The interval between each messages in ticks (1 second = 20 ticks)                             #
-# Permission: The permission a player needs to have to see the messages                                   #
-# Messages: The messages of this Broadcaster (Placeholders and Color codes (& symbol) work here)          #
-# You can add | to start a new line (up to 4 lines)                                                       #
-# ####################################################################################################### #
+# Should Signs broadcasting be enabled?
 Enabled: true
 SignsBroadcasters:
   ExampleSignsBroadcaster:
+    # Should the order be randomized?
     Random: false
+    # The signs on which this Broadcaster is active.
+    # This should not be touched unless you know what you're doing.
+    # To add a Sign to this broadcaster, use /fam addsign %Broadcaster% while you are looking at it
+    # To remove a Sign from this broadcaster, use /fam removesign %Broadcaster%
     Signs: []
+    # The interval between each messages in ticks (1 second = 20 ticks)
     Interval: 600
+    # The messages of this Broadcaster (Placeholders and Color codes (& symbol) work here)
+    # You can add | to start a new line (up to 4 lines)
     Messages:
     - '&1example message 1'
     - '&2example message 2|&2example message 2'
+DoNotChange: 1.1.0

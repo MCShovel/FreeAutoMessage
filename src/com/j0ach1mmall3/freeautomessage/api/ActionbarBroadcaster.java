@@ -1,16 +1,16 @@
 package com.j0ach1mmall3.freeautomessage.api;
 
-import com.j0ach1mmall3.freeautomessage.api.internal.methods.Random;
-import com.j0ach1mmall3.freeautomessage.api.internal.objects.Actionbar;
+import com.j0ach1mmall3.jlib.methods.Random;
+import com.j0ach1mmall3.jlib.visual.Actionbar;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
 /**
- * Created by j0ach1mmall3 on 17:47 18/08/2015 using IntelliJ IDEA.
+ * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
+ * @since 18/08/2015
  */
-public class ActionbarBroadcaster extends Broadcaster {
+public class ActionbarBroadcaster implements Broadcaster {
     private String identifier;
     private boolean random;
     private List<String> enabledWorlds;
@@ -29,7 +29,7 @@ public class ActionbarBroadcaster extends Broadcaster {
     }
 
     public String getIdentifier() {
-        return identifier;
+        return this.identifier;
     }
 
     public void setIdentifier(String identifier) {
@@ -37,7 +37,7 @@ public class ActionbarBroadcaster extends Broadcaster {
     }
 
     public boolean getRandom() {
-        return random;
+        return this.random;
     }
 
     public void setRandom(boolean random) {
@@ -45,7 +45,7 @@ public class ActionbarBroadcaster extends Broadcaster {
     }
 
     public List<String> getEnabledWorlds() {
-        return enabledWorlds;
+        return this.enabledWorlds;
     }
 
     public void setEnabledWorlds(List<String> enabledWorlds) {
@@ -53,7 +53,7 @@ public class ActionbarBroadcaster extends Broadcaster {
     }
 
     public int getInterval() {
-        return interval;
+        return this.interval;
     }
 
     public void setInterval(int interval) {
@@ -61,7 +61,7 @@ public class ActionbarBroadcaster extends Broadcaster {
     }
 
     public String getPermission() {
-        return permission;
+        return this.permission;
     }
 
     public void setPermission(String permission) {
@@ -69,7 +69,7 @@ public class ActionbarBroadcaster extends Broadcaster {
     }
 
     public List<String> getMessages() {
-        return messages;
+        return this.messages;
     }
 
     public void setMessages(List<String> messages) {
@@ -78,17 +78,12 @@ public class ActionbarBroadcaster extends Broadcaster {
 
     public void broadcast() {
         int id;
-        if(random) {
-            id = Random.getInt(messages.size());
-        } else {
-            if(count >= messages.size()) {
-                count = 0;
-            }
-            id = count;
-            count++;
+        if(this.random) id = Random.getInt(this.messages.size());
+        else {
+            if(this.count >= this.messages.size()) this.count = 0;
+            id = this.count;
+            this.count++;
         }
-        for(Player p : Bukkit.getOnlinePlayers()) {
-            if(p.hasPermission(permission) && enabledWorlds.contains(p.getWorld().getName())) new Actionbar(p, messages.get(id)).send();
-        }
+        Bukkit.getOnlinePlayers().stream().filter(p -> p.hasPermission(this.permission) && this.enabledWorlds.contains(p.getWorld().getName())).forEach(p -> new Actionbar(p, this.messages.get(id)).send());
     }
 }

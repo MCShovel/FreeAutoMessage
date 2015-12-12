@@ -1,44 +1,33 @@
 package com.j0ach1mmall3.freeautomessage.config;
 
 import com.j0ach1mmall3.freeautomessage.Main;
-import com.j0ach1mmall3.freeautomessage.api.internal.methods.General;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.j0ach1mmall3.jlib.storage.file.yaml.ConfigLoader;
 
 /**
- * Created by j0ach1mmall3 on 1:40 19/08/2015 using IntelliJ IDEA.
+ * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
+ * @since 19/08/2015
  */
-public class Config {
-    private Main plugin;
-    private com.j0ach1mmall3.freeautomessage.api.internal.storage.yaml.Config customConfig;
-    private FileConfiguration config;
-    private boolean updateChecker;
-    private int loggingLevel;
-    private String noPermissionMessage;
+public class Config extends ConfigLoader {
+    private final boolean updateChecker;
+    private final int loggingLevel;
+    private final String noPermissionMessage;
     public Config(Main plugin) {
-        this.plugin = plugin;
-        this.customConfig = new com.j0ach1mmall3.freeautomessage.api.internal.storage.yaml.Config("config.yml", plugin);
-        customConfig.saveDefaultConfig();
-        this.config = customConfig.getConfig();
-        loggingLevel = config.getInt("LoggingLevel");
-        updateChecker = config.getBoolean("UpdateChecker");
-        noPermissionMessage = config.getString("NoPermissionMessage");
-    }
-
-    public void load() {
-        if(loggingLevel >= 2 && !updateChecker) General.sendColoredMessage(plugin, "Update Checking is not enabled! You will not receive console notifications!", ChatColor.GOLD);
-        if(loggingLevel >= 2) General.sendColoredMessage(plugin, "Main config successfully loaded!", ChatColor.GREEN);
+        super("config.yml", plugin);
+        this.customConfig.saveDefaultConfig();
+        this.loggingLevel = this.config.getInt("LoggingLevel");
+        this.updateChecker = this.config.getBoolean("UpdateChecker");
+        this.noPermissionMessage = this.config.getString("NoPermissionMessage");
     }
 
     public boolean getUpdateChecker() {
-        return updateChecker;
+        return this.updateChecker;
     }
 
     public int getLoggingLevel() {
-        return loggingLevel;
+        return this.loggingLevel;
     }
 
     public String getNoPermissionMessage() {
-        return noPermissionMessage;
+        return this.noPermissionMessage;
     }
 }

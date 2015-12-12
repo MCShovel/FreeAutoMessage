@@ -1,0 +1,12 @@
+# Should Command broadcasting be enabled?
+Enabled: true
+CommandBroadcasters:
+  ExampleCommandBroadcaster:
+    # Should the order be randomized?
+    Random: false
+    # The interval between each messages in ticks (1 second = 20 ticks)
+    Interval: 20
+    # The commands of this Broadcaster (Placeholders and Color codes (& symbol) work here)
+    Commands:
+    - "say Wow, a command!"
+DoNotChange: 1.1.0

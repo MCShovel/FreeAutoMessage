@@ -1,8 +1,8 @@
 package com.j0ach1mmall3.freeautomessage.api;
 
-import com.j0ach1mmall3.freeautomessage.api.internal.methods.Parsing;
-import com.j0ach1mmall3.freeautomessage.api.internal.methods.Random;
-import me.clip.placeholderapi.PlaceholderAPI;
+import com.j0ach1mmall3.jlib.integration.Placeholders;
+import com.j0ach1mmall3.jlib.methods.Parsing;
+import com.j0ach1mmall3.jlib.methods.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.inventivetalent.bossbar.BossBarAPI;
@@ -10,9 +10,10 @@ import org.inventivetalent.bossbar.BossBarAPI;
 import java.util.List;
 
 /**
- * Created by j0ach1mmall3 on 2:10 19/08/2015 using IntelliJ IDEA.
+ * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
+ * @since 19/08/2015
  */
-public class BossbarBroadcaster extends Broadcaster {
+public class BossbarBroadcaster implements Broadcaster {
     private String identifier;
     private boolean random;
     private List<String> enabledWorlds;
@@ -31,7 +32,7 @@ public class BossbarBroadcaster extends Broadcaster {
     }
 
     public String getIdentifier() {
-        return identifier;
+        return this.identifier;
     }
 
     public void setIdentifier(String identifier) {
@@ -39,7 +40,7 @@ public class BossbarBroadcaster extends Broadcaster {
     }
 
     public boolean getRandom() {
-        return random;
+        return this.random;
     }
 
     public void setRandom(boolean random) {
@@ -47,7 +48,7 @@ public class BossbarBroadcaster extends Broadcaster {
     }
 
     public List<String> getEnabledWorlds() {
-        return enabledWorlds;
+        return this.enabledWorlds;
     }
 
     public void setEnabledWorlds(List<String> enabledWorlds) {
@@ -55,7 +56,7 @@ public class BossbarBroadcaster extends Broadcaster {
     }
 
     public int getInterval() {
-        return interval;
+        return this.interval;
     }
 
     public void setInterval(int interval) {
@@ -63,7 +64,7 @@ public class BossbarBroadcaster extends Broadcaster {
     }
 
     public String getPermission() {
-        return permission;
+        return this.permission;
     }
 
     public void setPermission(String permission) {
@@ -71,7 +72,7 @@ public class BossbarBroadcaster extends Broadcaster {
     }
 
     public List<String> getMessages() {
-        return messages;
+        return this.messages;
     }
 
     public void setMessages(List<String> messages) {
@@ -80,27 +81,20 @@ public class BossbarBroadcaster extends Broadcaster {
 
     public void broadcast() {
         int id;
-        if(random) {
-            id = Random.getInt(messages.size());
-        } else {
-            if(count >= messages.size()) {
-                count = 0;
-            }
-            id = count;
-            count++;
+        if(this.random) id = Random.getInt(this.messages.size());
+        else {
+            if(this.count >= this.messages.size()) this.count = 0;
+            id = this.count;
+            this.count++;
         }
-        for(Player p : Bukkit.getOnlinePlayers()) {
-            if(p.hasPermission(permission) && enabledWorlds.contains(p.getWorld().getName())) displayPlayer(p, messages.get(id));
-        }
+        Bukkit.getOnlinePlayers().stream().filter(p -> p.hasPermission(this.permission) && this.enabledWorlds.contains(p.getWorld().getName())).forEach(p -> this.displayPlayer(p, this.messages.get(id)));
     }
 
     private void displayPlayer(Player p, String message) {
         BossBarAPI.removeBar(p);
         if(message.contains("|")) {
             String[] parts = message.split("\\|");
-            BossBarAPI.setMessage(p, PlaceholderAPI.setPlaceholders(p, parts[0]), Float.valueOf(Parsing.parseString(parts[1])));
-        } else {
-            BossBarAPI.setMessage(p, PlaceholderAPI.setPlaceholders(p, message));
-        }
+            BossBarAPI.setMessage(p, Placeholders.parse(parts[0], p), Parsing.parseFloat(parts[1]));
+        } else BossBarAPI.setMessage(p, Placeholders.parse(message, p));
     }
 }

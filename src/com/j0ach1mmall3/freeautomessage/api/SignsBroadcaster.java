@@ -1,8 +1,8 @@
 package com.j0ach1mmall3.freeautomessage.api;
 
-import com.j0ach1mmall3.freeautomessage.api.internal.methods.Parsing;
-import com.j0ach1mmall3.freeautomessage.api.internal.methods.Random;
-import me.clip.placeholderapi.PlaceholderAPI;
+import com.j0ach1mmall3.jlib.integration.Placeholders;
+import com.j0ach1mmall3.jlib.methods.Parsing;
+import com.j0ach1mmall3.jlib.methods.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -12,9 +12,10 @@ import org.bukkit.block.Sign;
 import java.util.List;
 
 /**
- * Created by j0ach1mmall3 on 2:44 19/08/2015 using IntelliJ IDEA.
+ * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
+ * @since 19/08/2015
  */
-public class SignsBroadcaster extends Broadcaster {
+public class SignsBroadcaster implements Broadcaster {
     private String identifier;
     private boolean random;
     private List<String> signs;
@@ -31,7 +32,7 @@ public class SignsBroadcaster extends Broadcaster {
     }
 
     public String getIdentifier() {
-        return identifier;
+        return this.identifier;
     }
 
     public void setIdentifier(String identifier) {
@@ -39,7 +40,7 @@ public class SignsBroadcaster extends Broadcaster {
     }
 
     public boolean getRandom() {
-        return random;
+        return this.random;
     }
 
     public void setRandom(boolean random) {
@@ -47,7 +48,7 @@ public class SignsBroadcaster extends Broadcaster {
     }
 
     public List<String> getSigns() {
-        return signs;
+        return this.signs;
     }
 
     public void setSigns(List<String> signs) {
@@ -55,7 +56,7 @@ public class SignsBroadcaster extends Broadcaster {
     }
 
     public int getInterval() {
-        return interval;
+        return this.interval;
     }
 
     public void setInterval(int interval) {
@@ -63,7 +64,7 @@ public class SignsBroadcaster extends Broadcaster {
     }
 
     public List<String> getMessages() {
-        return messages;
+        return this.messages;
     }
 
     public void setMessages(List<String> messages) {
@@ -72,33 +73,28 @@ public class SignsBroadcaster extends Broadcaster {
 
     public void broadcast() {
         int id;
-        if(random) {
-            id = Random.getInt(messages.size());
-        } else {
-            if(count >= messages.size()) {
-                count = 0;
-            }
-            id = count;
-            count++;
+        if(this.random) id = Random.getInt(this.messages.size());
+        else {
+            if(this.count >= this.messages.size()) this.count = 0;
+            id = this.count;
+            this.count++;
         }
-        for(String s : signs) {
-            if(getWorld(s) == null) {
-                continue;
-            }
-            Block b = getWorld(s).getBlockAt(deserializeLocation(s));
+        for(String s : this.signs) {
+            if(this.getWorld(s) == null) continue;
+            Block b = this.getWorld(s).getBlockAt(this.deserializeLocation(s));
             if(b.getState() instanceof Sign) {
                 Sign sign = (Sign) b.getState();
                 for(int i=0;i<4;i++) {
                     sign.setLine(i, "");
                 }
-                setSign(sign, messages.get(id));
+                this.setSign(sign, this.messages.get(id));
             }
         }
     }
 
     private Location deserializeLocation(String s) {
         String[] parts = s.split("/");
-        return new Location(Bukkit.getWorld(parts[0]), Parsing.parseString(parts[1]), Parsing.parseString(parts[2]), Parsing.parseString(parts[3]));
+        return new Location(Bukkit.getWorld(parts[0]), Parsing.parseInt(parts[1]), Parsing.parseInt(parts[2]), Parsing.parseInt(parts[3]));
     }
 
     private World getWorld(String s) {
@@ -111,7 +107,7 @@ public class SignsBroadcaster extends Broadcaster {
         int a = parts.length;
         if(parts.length > 4) a = 4;
         for(int i=0;i<a;i++) {
-            sign.setLine(i, PlaceholderAPI.setPlaceholders(null, parts[i]));
+            sign.setLine(i, Placeholders.parse(parts[i]));
             sign.update();
         }
     }

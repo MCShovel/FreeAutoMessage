@@ -1,41 +1,35 @@
 package com.j0ach1mmall3.freeautomessage.api;
 
 import com.j0ach1mmall3.freeautomessage.Main;
-import com.j0ach1mmall3.freeautomessage.api.internal.storage.yaml.Config;
 import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
 
 /**
- * Created by j0ach1mmall3 on 20:58 19/08/2015 using IntelliJ IDEA.
+ * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
+ * @since 19/08/2015
  */
 public class Sign {
-    private Main plugin;
-    private Config customConfig;
-    private FileConfiguration config;
-    private String brdcasterIdentifier;
+    private final Main plugin;
+    private String broadcasterIdentifier;
     private Location location;
 
-    public Sign(Main plugin, String brdcasterIdentifier, Location location) {
+    public Sign(Main plugin, String broadcasterIdentifier, Location location) {
         this.plugin = plugin;
-        this.customConfig = new Config("signs.yml", plugin);
-        customConfig.saveDefaultConfig();
-        this.config = customConfig.getConfig();
-        this.brdcasterIdentifier = brdcasterIdentifier;
+        this.broadcasterIdentifier = broadcasterIdentifier;
         this.location = location;
     }
 
     public String getBroadcasterIdentifier() {
-        return brdcasterIdentifier;
+        return this.broadcasterIdentifier;
     }
 
-    public void setBroadcasterIdentifier(String brdcasterIdentifier) {
-        this.brdcasterIdentifier = brdcasterIdentifier;
+    public void setBroadcasterIdentifier(String broadcasterIdentifier) {
+        this.broadcasterIdentifier = broadcasterIdentifier;
     }
 
     public Location getLocation() {
-        return location;
+        return this.location;
     }
 
     public void setLocation(Location location) {
@@ -43,37 +37,22 @@ public class Sign {
     }
 
     public void add() {
-        String path = "SignsBroadcasters." + brdcasterIdentifier + ".";
-        List<String> signs = config.getStringList(path + "Signs");
-        signs.add(serializeLocation(location));
-        config.set("SignsBroadcasters." + brdcasterIdentifier + ".Signs", signs);
-        customConfig.saveConfig(config);
+        this.plugin.getSigns().addSign(this);
     }
 
     public void remove() {
-        String path = "SignsBroadcasters." + brdcasterIdentifier + ".";
-        List<String> signs = config.getStringList(path + "Signs");
-        signs.remove(serializeLocation(location));
-        config.set("SignsBroadcasters." + brdcasterIdentifier + ".Signs", signs);
-        customConfig.saveConfig(config);
+        this.plugin.getSigns().removeSign(this);
     }
 
     public List<String> list() {
-        String path = "SignsBroadcasters." + brdcasterIdentifier + ".";
-        return config.getStringList(path + "Signs");
+        return this.plugin.getSigns().listSigns(this.broadcasterIdentifier);
     }
 
     public boolean exists() {
-        String path = "SignsBroadcasters." + brdcasterIdentifier + ".";
-        List<String> signs = config.getStringList(path + "Signs");
-        return signs.contains(serializeLocation(location));
+        return this.plugin.getSigns().existsSign(this);
     }
 
     public boolean isSignsBroadcaster() {
-        return customConfig.getKeys("SignsBroadcasters").contains(brdcasterIdentifier);
-    }
-
-    private String serializeLocation(Location l) {
-        return l.getWorld().getName() + "/" + String.valueOf(l.getBlockX()) + "/" + String.valueOf(l.getBlockY()) + "/" + String.valueOf(l.getBlockZ());
+        return this.plugin.getSigns().isSignsBroadcaster(this.broadcasterIdentifier);
     }
 }

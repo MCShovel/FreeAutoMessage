@@ -3,61 +3,49 @@ package com.j0ach1mmall3.freeautomessage.config;
 import com.j0ach1mmall3.freeautomessage.BroadcastScheduler;
 import com.j0ach1mmall3.freeautomessage.Main;
 import com.j0ach1mmall3.freeautomessage.api.ActionbarBroadcaster;
-import com.j0ach1mmall3.freeautomessage.api.internal.methods.General;
-import com.j0ach1mmall3.freeautomessage.api.internal.storage.yaml.Config;
+import com.j0ach1mmall3.jlib.methods.General;
+import com.j0ach1mmall3.jlib.methods.ReflectionAPI;
+import com.j0ach1mmall3.jlib.storage.file.yaml.ConfigLoader;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * Created by j0ach1mmall3 on 1:51 19/08/2015 using IntelliJ IDEA.
+ * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
+ * @since 19/08/2015
  */
-public class Actionbar {
-    private Main plugin;
-    private Config customConfig;
-    private FileConfiguration config;
+public class Actionbar extends ConfigLoader {
     private boolean enabled;
-    private List<ActionbarBroadcaster> broadcasters;
+    private final List<ActionbarBroadcaster> broadcasters;
     public Actionbar(Main plugin) {
-        this.plugin = plugin;
-        this.customConfig = new Config("actionbar.yml", plugin);
-        customConfig.saveDefaultConfig();
-        this.config = customConfig.getConfig();
-        enabled = config.getBoolean("Enabled");
-        com.j0ach1mmall3.freeautomessage.config.Config pluginConfig = new com.j0ach1mmall3.freeautomessage.config.Config(plugin);
-        if(enabled && !plugin.verBiggerThan(1, 8)){
-            if(pluginConfig.getLoggingLevel() >= 1) General.sendColoredMessage(plugin, "It seems that Actionbar Broadcasting is enabled in the config, however the server is running 1.7 or lower! Fixing that for you :)", ChatColor.RED);
-            enabled = false;
+        super("actionbar.yml", plugin);
+        this.enabled = this.config.getBoolean("Enabled");
+        if(this.enabled && !ReflectionAPI.verBiggerThan(1, 8)){
+            if(plugin.getBabies().getLoggingLevel() >= 1) General.sendColoredMessage(plugin, "It seems that Actionbar Broadcasting is enabled in the config, however the server is running 1.7 or lower! Fixing that for you :)", ChatColor.RED);
+            this.enabled = false;
         }
-        broadcasters = getBroadcasters();
-        if(enabled) {
-            for(ActionbarBroadcaster broadcaster : broadcasters) {
-                new BroadcastScheduler(broadcaster).runTaskTimer(plugin, 0, broadcaster.getInterval());
-            }
-            if(pluginConfig.getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Started broadcasting Actionbar messages!", ChatColor.GREEN);
+        this.broadcasters = this.getBroadcasters();
+        if(this.enabled) {
+            this.broadcasters.forEach(broadcaster -> new BroadcastScheduler(broadcaster).runTaskTimer(plugin, 0, broadcaster.getInterval()));
+            if(plugin.getBabies().getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Started broadcasting Actionbar messages!", ChatColor.GREEN);
         }
-        if(pluginConfig.getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Actionbar config successfully loaded!", ChatColor.GREEN);
+        if(plugin.getBabies().getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Actionbar config successfully loaded!", ChatColor.GREEN);
     }
 
     private List<ActionbarBroadcaster> getBroadcasters() {
-        List<ActionbarBroadcaster> broadcasters = new ArrayList<>();
-        for(String s : customConfig.getKeys("ActionbarBroadcasters")) {
-            broadcasters.add(getBroadcasterByIdentifier(s));
-        }
-        return broadcasters;
+        return this.customConfig.getKeys("ActionbarBroadcasters").stream().map(this::getBroadcasterByIdentifier).collect(Collectors.toList());
     }
 
     private ActionbarBroadcaster getBroadcasterByIdentifier(String identifier) {
         String path = "ActionbarBroadcasters." + identifier + ".";
         return new ActionbarBroadcaster(
                 identifier,
-                config.getBoolean(path + "Random"),
-                config.getStringList(path + "EnabledWorlds"),
-                config.getInt(path + "Interval"),
-                config.getString(path + "Permission"),
-                config.getStringList(path + "Messages")
+                this.config.getBoolean(path + "Random"),
+                this.config.getStringList(path + "EnabledWorlds"),
+                this.config.getInt(path + "Interval"),
+                this.config.getString(path + "Permission"),
+                this.config.getStringList(path + "Messages")
         );
     }
 }

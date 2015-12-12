@@ -1,26 +1,18 @@
-# ####################################################################################################### #
-# FreeAutoMessage version 1.0.0 configuration                                                             #
-# Any help with this configuration should be requested here:                                              #
-# https://www.spigotmc.org/resources/free-auto-message.11191/                                             #
-# (c) 2015 j0ach1mmall3 - All rights reserved                                                             #
-# ####################################################################################################### #
-# CONFIGURATION DOCUMENTATION                                                                             #
-# Enabled: Should Bossbar broadcasting be enabled? (Note: this requires BossBarAPI!)                      #
-# Random: Should the order be randomized?                                                                 #
-# EnabledWorlds: The worlds in which this Broadcaster will be active                                      #
-# Interval: The interval between each messages in ticks (1 second = 20 ticks)                             #
-# Permission: The permission a player needs to have to see the messages                                   #
-# Messages: The messages of this Broadcaster (Placeholders and Color codes (& symbol) work here)          #
-# You can add |%percentage here% to make it only display a percentage of the Boss Bar as full             #
-# ####################################################################################################### #
+# Should Bossbar broadcasting be enabled? (Note: this requires BossBarAPI!)
 Enabled: true
 BossbarBroadcasters:
   ExampleBossbarbarBroadcaster:
+    # Should the order be randomized?
     Random: false
+    # The worlds in which this Broadcaster will be active
     EnabledWorlds:
     - world
+    # The interval between each messages in ticks (1 second = 20 ticks)
     Interval: 20
+    # The permission a player needs to have to see the messages
     Permission: example.bossbarbar.broadcaster
+    # The messages of this Broadcaster (Placeholders and Color codes (& symbol) work here)
+    # You can add |%percentage here% to make it only display a percentage of the Boss Bar as full
     Messages:
     - '&6I <3 &dFreeAutoMessage&6!'
     - '&6I <3 &dFreeAutoMessage&6!|90'
@@ -42,3 +34,4 @@ BossbarBroadcasters:
     - '&6I <3 &dFreeAutoMessage&6!|70'
     - '&6I <3 &dFreeAutoMessage&6!|80'
     - '&6I <3 &dFreeAutoMessage&6!|90'
+DoNotChange: 1.1.0

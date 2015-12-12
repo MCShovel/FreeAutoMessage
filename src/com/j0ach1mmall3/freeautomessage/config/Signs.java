@@ -2,57 +2,77 @@ package com.j0ach1mmall3.freeautomessage.config;
 
 import com.j0ach1mmall3.freeautomessage.BroadcastScheduler;
 import com.j0ach1mmall3.freeautomessage.Main;
+import com.j0ach1mmall3.freeautomessage.api.Sign;
 import com.j0ach1mmall3.freeautomessage.api.SignsBroadcaster;
-import com.j0ach1mmall3.freeautomessage.api.internal.methods.General;
-import com.j0ach1mmall3.freeautomessage.api.internal.storage.yaml.Config;
+import com.j0ach1mmall3.jlib.methods.General;
+import com.j0ach1mmall3.jlib.storage.file.yaml.ConfigLoader;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.Location;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * Created by j0ach1mmall3 on 2:58 19/08/2015 using IntelliJ IDEA.
+ * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
+ * @since 19/08/2015
  */
-public class Signs {
-    private Main plugin;
-    private Config customConfig;
-    private FileConfiguration config;
-    private boolean enabled;
-    private List<SignsBroadcaster> broadcasters;
+public class Signs extends ConfigLoader {
+    private final boolean enabled;
+    private final List<SignsBroadcaster> broadcasters;
     public Signs(Main plugin) {
-        this.plugin = plugin;
-        this.customConfig = new Config("signs.yml", plugin);
-        customConfig.saveDefaultConfig();
-        this.config = customConfig.getConfig();
-        enabled = config.getBoolean("Enabled");
-        broadcasters = getBroadcasters();
-        com.j0ach1mmall3.freeautomessage.config.Config pluginConfig = new com.j0ach1mmall3.freeautomessage.config.Config(plugin);
-        if(enabled) {
-            for(SignsBroadcaster broadcaster : broadcasters) {
-                new BroadcastScheduler(broadcaster).runTaskTimer(plugin, 0, broadcaster.getInterval());
-            }
-            if(pluginConfig.getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Started broadcasting Signs messages!", ChatColor.GREEN);
+        super("signs.yml", plugin);
+        this.enabled = this.config.getBoolean("Enabled");
+        this.broadcasters = this.getBroadcasters();
+        if(this.enabled) {
+            this.broadcasters.forEach(broadcaster -> new BroadcastScheduler(broadcaster).runTaskTimer(plugin, 0, broadcaster.getInterval()));
+            if(plugin.getBabies().getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Started broadcasting Signs messages!", ChatColor.GREEN);
         }
-        if(pluginConfig.getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Signs config successfully loaded!", ChatColor.GREEN);
+        if(plugin.getBabies().getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Signs config successfully loaded!", ChatColor.GREEN);
     }
 
     private List<SignsBroadcaster> getBroadcasters() {
-        List<SignsBroadcaster> broadcasters = new ArrayList<>();
-        for(String s : customConfig.getKeys("SignsBroadcasters")) {
-            broadcasters.add(getBroadcasterByIdentifier(s));
-        }
-        return broadcasters;
+        return this.customConfig.getKeys("SignsBroadcasters").stream().map(this::getBroadcasterByIdentifier).collect(Collectors.toList());
     }
 
     private SignsBroadcaster getBroadcasterByIdentifier(String identifier) {
         String path = "SignsBroadcasters." + identifier + ".";
         return new SignsBroadcaster(
                 identifier,
-                config.getBoolean(path + "Random"),
-                config.getStringList(path + "Signs"),
-                config.getInt(path + "Interval"),
-                config.getStringList(path + "Messages")
+                this.config.getBoolean(path + "Random"),
+                this.config.getStringList(path + "Signs"),
+                this.config.getInt(path + "Interval"),
+                this.config.getStringList(path + "Messages")
         );
+    }
+
+    public void addSign(Sign sign) {
+        List<String> signs = this.config.getStringList("SignsBroadcasters." + sign.getBroadcasterIdentifier() + "Signs");
+        signs.add(this.serializeLocation(sign.getLocation()));
+        this.config.set("SignsBroadcasters." + sign.getBroadcasterIdentifier() + ".Signs", signs);
+        this.customConfig.saveConfig(this.config);
+    }
+
+    public void removeSign(Sign sign) {
+        List<String> signs = this.config.getStringList("SignsBroadcasters." + sign.getBroadcasterIdentifier() + "Signs");
+        signs.remove(this.serializeLocation(sign.getLocation()));
+        this.config.set("SignsBroadcasters." + sign.getBroadcasterIdentifier() + ".Signs", signs);
+        this.customConfig.saveConfig(this.config);
+    }
+
+    public List<String> listSigns(String broadcaster) {
+        return this.config.getStringList("SignsBroadcasters." + broadcaster + ".Signs");
+    }
+
+    public boolean existsSign(Sign sign) {
+        List<String> signs = this.config.getStringList("SignsBroadcasters." + sign.getBroadcasterIdentifier() + "Signs");
+        return signs.contains(this.serializeLocation(sign.getLocation()));
+    }
+
+    public boolean isSignsBroadcaster(String identifier) {
+        return this.customConfig.getKeys("SignsBroadcasters").contains(identifier);
+    }
+
+    private String serializeLocation(Location l) {
+        return l.getWorld().getName() + "/" + String.valueOf(l.getBlockX()) + "/" + String.valueOf(l.getBlockY()) + "/" + String.valueOf(l.getBlockZ());
     }
 }

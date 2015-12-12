@@ -1,28 +1,21 @@
-# ####################################################################################################### #
-# FreeAutoMessage version 1.0.0 configuration                                                             #
-# Any help with this configuration should be requested here:                                              #
-# https://www.spigotmc.org/resources/free-auto-message.11191/                                             #
-# (c) 2015 j0ach1mmall3 - All rights reserved                                                             #
-###########################################################################################################
-# CONFIGURATION DOCUMENTATION                                                                             #
-# Enabled: Should Tablist broadcasting be enabled? (Note: this requires Minecraft version 1.8!)           #
-# Random: Should the order be randomized?                                                                 #
-# EnabledWorlds: The worlds in which this Broadcaster will be active                                      #
-# Interval: The interval between each messages in ticks (1 second = 20 ticks)                             #
-# Permission: The permission a player needs to have to see the messages                                   #
-# Messages: The messages of this Broadcaster (Placeholders and Color codes (& symbol) work here)          #
-# You can use | to seperate the header from the footer                                                    #
-# To use a header only, don't use | (Footer will reset to blank                                           #
-# To use a footer only, start the message with | (Header will reset to blank                              #
-###########################################################################################################
+# Should Tablist broadcasting be enabled? (Note: this requires Minecraft version 1.8!)
 Enabled: true
 TablistBroadcasters:
   ExampleTablistBroadcaster:
+    # Should the order be randomized?
     Random: false
+    # The worlds in which this Broadcaster will be active
     EnabledWorlds:
     - world
+    # The interval between each messages in ticks (1 second = 20 ticks)
     Interval: 600
+    # The permission a player needs to have to see the messages
     Permission: example.tablist.broadcaster
+    # The messages of this Broadcaster (Placeholders and Color codes (& symbol) work here)
+    # You can use | to seperate the header from the footer
+    # To use a header only, don't use | (Footer will reset to blank)
+    # To use a footer only, start the message with | (Header will reset to blank)
     Messages:
     - '&1example message 1'
     - '&2example message 2 header|&2example message 2 footer'
+DoNotChange: 1.1.0

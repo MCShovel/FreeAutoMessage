@@ -1,31 +1,24 @@
-# ####################################################################################################### #
-# FreeAutoMessage version 1.0.0 configuration                                                             #
-# Any help with this configuration should be requested here:                                              #
-# https://www.spigotmc.org/resources/free-auto-message.11191/                                             #
-# (c) 2015 j0ach1mmall3 - All rights reserved                                                             #
-###########################################################################################################
-# CONFIGURATION DOCUMENTATION                                                                             #
-# Enabled: Should Subtitle broadcasting be enabled? (Note: this requires Minecraft version 1.8!)          #
-# Random: Should the order be randomized?                                                                 #
-# EnabledWorlds: The worlds in which this Broadcaster will be active                                      #
-# Interval: The interval between each messages in ticks (1 second = 20 ticks)                             #
-# Permission: The permission a player needs to have to see the messages                                   #
-# FadeIn: The time in ticks (1 second = 20 ticks) for the 'fade in'                                       #
-# Stay: The time in ticks (1 second = 20 ticks) for the message to stay                                   #
-# The time in ticks (1 second = 20 ticks) for the 'fade out'                                              #
-# Messages: The messages of this Broadcaster (Placeholders and Color codes (& symbol) work here)          #
-###########################################################################################################
+# Should Subtitle broadcasting be enabled? (Note: this requires Minecraft version 1.8!)
 Enabled: true
 SubtitleBroadcasters:
   ExampleSubtitleBroadcaster:
+    # Should the order be randomized?
     Random: false
+    # The worlds in which this Broadcaster will be active
     EnabledWorlds:
     - world
+    # The interval between each messages in ticks (1 second = 20 ticks)
     Interval: 600
+    # The permission a player needs to have to see the messages
     Permission: example.subtitle.broadcaster
+    # The time in ticks (1 second = 20 ticks) for the 'fade in'
     FadeIn: 20
+    # The time in ticks (1 second = 20 ticks) for the message to stay
     Stay: 60
+    # The time in ticks (1 second = 20 ticks) for the 'fade out'
     FadeOut: 20
+    # The messages of this Broadcaster (Placeholders and Color codes (& symbol) work here)
     Messages:
     - '&1example message 1'
     - '&2example message 2'
+DoNotChange: 1.1.0

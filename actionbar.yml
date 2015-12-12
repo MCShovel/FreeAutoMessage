@@ -1,26 +1,19 @@
-# ####################################################################################################### #
-# FreeAutoMessage version 1.0.0 configuration                                                             #
-# Any help with this configuration should be requested here:                                              #
-# https://www.spigotmc.org/resources/free-auto-message.11191/                                             #
-# (c) 2015 j0ach1mmall3 - All rights reserved                                                             #
-###########################################################################################################
-# CONFIGURATION DOCUMENTATION                                                                             #
-# Enabled: Should Actionbar broadcasting be enabled? (Note: this requires Minecraft version 1.8!)         #
-# Random: Should the order be randomized?                                                                 #
-# EnabledWorlds: The worlds in which this Broadcaster will be active                                      #
-# Interval: The interval between each messages in ticks (1 second = 20 ticks)                             #
-# Permission: The permission a player needs to have to see the messages                                   #
-# Messages: The messages of this Broadcaster (Placeholders and Color codes (& symbol) work here)          #
-###########################################################################################################
+# Should Actionbar broadcasting be enabled? (Note: this requires Minecraft version 1.8!)
 Enabled: true
 ActionbarBroadcasters:
   ExampleActionbarBroadcaster:
+    # Should the order be randomized?
     Random: false
+    # The worlds in which this Broadcaster will be active
     EnabledWorlds:
     - world
+    # The interval between each messages in ticks (1 second = 20 ticks)
     Interval: 20
+    # The permission a player needs to have to see the messages
     Permission: example.actionbar.broadcaster
+    # The messages of this Broadcaster (Placeholders and Color codes (& symbol) work here)
     Messages:
     - "&dFreeAutoMessage Actionbar!"
     - "&67 different methods to broadcast messages!"
     - "&6All of that, for &lfree&6!"
+DoNotChange: 1.1.0
