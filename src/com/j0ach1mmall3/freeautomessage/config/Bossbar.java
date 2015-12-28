@@ -21,6 +21,7 @@ public class Bossbar extends ConfigLoader {
     private final List<BossbarBroadcaster> broadcasters;
     public Bossbar(Main plugin) {
         super("bossbar.yml", plugin);
+        this.enabled = this.config.getBoolean("Enabled");
         if(this.enabled && !plugin.getBossBarAPI()){
             if(plugin.getBabies().getLoggingLevel() >= 1) General.sendColoredMessage(plugin, "It seems that Bossbar Broadcasting is enabled in the config, but BossBarAPI isn't found! Fixing that for you :)", ChatColor.RED);
             this.enabled = false;
