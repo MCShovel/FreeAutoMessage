@@ -3,13 +3,14 @@ package com.j0ach1mmall3.freeautomessage.config;
 import com.j0ach1mmall3.freeautomessage.BroadcastScheduler;
 import com.j0ach1mmall3.freeautomessage.Main;
 import com.j0ach1mmall3.freeautomessage.api.ActionbarBroadcaster;
+import com.j0ach1mmall3.freeautomessage.api.Broadcaster;
 import com.j0ach1mmall3.jlib.methods.General;
 import com.j0ach1mmall3.jlib.methods.ReflectionAPI;
 import com.j0ach1mmall3.jlib.storage.file.yaml.ConfigLoader;
 import org.bukkit.ChatColor;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class Actionbar extends ConfigLoader {
     private boolean enabled;
-    private final List<ActionbarBroadcaster> broadcasters;
+    private final List<Broadcaster> broadcasters;
     public Actionbar(Main plugin) {
         super("actionbar.yml", plugin);
         this.enabled = this.config.getBoolean("Enabled");
@@ -27,14 +28,20 @@ public class Actionbar extends ConfigLoader {
         }
         this.broadcasters = this.getBroadcasters();
         if(this.enabled) {
-            this.broadcasters.forEach(broadcaster -> new BroadcastScheduler(broadcaster).runTaskTimer(plugin, 0, broadcaster.getInterval()));
+            for(Broadcaster broadcaster : this.broadcasters) {
+                new BroadcastScheduler(broadcaster).runTaskTimer(plugin, 0, broadcaster.getInterval());
+            }
             if(plugin.getBabies().getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Started broadcasting Actionbar messages!", ChatColor.GREEN);
         }
         if(plugin.getBabies().getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Actionbar config successfully loaded!", ChatColor.GREEN);
     }
 
-    private List<ActionbarBroadcaster> getBroadcasters() {
-        return this.customConfig.getKeys("ActionbarBroadcasters").stream().map(this::getBroadcasterByIdentifier).collect(Collectors.toList());
+    private List<Broadcaster> getBroadcasters() {
+        List<Broadcaster> broadcasters = new ArrayList<>();
+        for(String s : this.customConfig.getKeys("ActionbarBroadcasters")) {
+            broadcasters.add(this.getBroadcasterByIdentifier(s));
+        }
+        return broadcasters;
     }
 
     private ActionbarBroadcaster getBroadcasterByIdentifier(String identifier) {

@@ -3,6 +3,7 @@ package com.j0ach1mmall3.freeautomessage.api;
 import com.j0ach1mmall3.jlib.methods.Random;
 import com.j0ach1mmall3.jlib.visual.Actionbar;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -84,6 +85,8 @@ public class ActionbarBroadcaster implements Broadcaster {
             id = this.count;
             this.count++;
         }
-        Bukkit.getOnlinePlayers().stream().filter(p -> p.hasPermission(this.permission) && this.enabledWorlds.contains(p.getWorld().getName())).forEach(p -> new Actionbar(p, this.messages.get(id)).send());
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            if(p.hasPermission(this.permission) && this.enabledWorlds.contains(p.getWorld().getName())) new Actionbar(p, this.messages.get(id)).send();
+        }
     }
 }

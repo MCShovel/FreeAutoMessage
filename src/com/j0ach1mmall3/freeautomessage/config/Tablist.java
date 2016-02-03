@@ -2,14 +2,15 @@ package com.j0ach1mmall3.freeautomessage.config;
 
 import com.j0ach1mmall3.freeautomessage.BroadcastScheduler;
 import com.j0ach1mmall3.freeautomessage.Main;
+import com.j0ach1mmall3.freeautomessage.api.Broadcaster;
 import com.j0ach1mmall3.freeautomessage.api.TablistBroadcaster;
 import com.j0ach1mmall3.jlib.methods.General;
 import com.j0ach1mmall3.jlib.methods.ReflectionAPI;
 import com.j0ach1mmall3.jlib.storage.file.yaml.ConfigLoader;
 import org.bukkit.ChatColor;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class Tablist extends ConfigLoader {
     private boolean enabled;
-    private final List<TablistBroadcaster> broadcasters;
+    private final List<Broadcaster> broadcasters;
     public Tablist(Main plugin) {
         super("tablist.yml", plugin);
         this.enabled = this.config.getBoolean("Enabled");
@@ -27,14 +28,20 @@ public class Tablist extends ConfigLoader {
         }
         this.broadcasters = this.getBroadcasters();
         if(this.enabled) {
-            this.broadcasters.forEach(broadcaster -> new BroadcastScheduler(broadcaster).runTaskTimer(plugin, 0, broadcaster.getInterval()));
+            for(Broadcaster broadcaster : this.broadcasters) {
+                new BroadcastScheduler(broadcaster).runTaskTimer(plugin, 0, broadcaster.getInterval());
+            }
             if(plugin.getBabies().getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Started broadcasting Tablist messages!", ChatColor.GREEN);
         }
         if(plugin.getBabies().getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Tablist config successfully loaded!", ChatColor.GREEN);
     }
 
-    private List<TablistBroadcaster> getBroadcasters() {
-        return this.customConfig.getKeys("TablistBroadcasters").stream().map(this::getBroadcasterByIdentifier).collect(Collectors.toList());
+    private List<Broadcaster> getBroadcasters() {
+        List<Broadcaster> broadcasters = new ArrayList<>();
+        for(String s : this.customConfig.getKeys("TablistBroadcasters")) {
+            broadcasters.add(this.getBroadcasterByIdentifier(s));
+        }
+        return broadcasters;
     }
 
     private TablistBroadcaster getBroadcasterByIdentifier(String identifier) {

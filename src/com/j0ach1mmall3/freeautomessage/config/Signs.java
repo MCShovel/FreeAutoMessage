@@ -2,6 +2,7 @@ package com.j0ach1mmall3.freeautomessage.config;
 
 import com.j0ach1mmall3.freeautomessage.BroadcastScheduler;
 import com.j0ach1mmall3.freeautomessage.Main;
+import com.j0ach1mmall3.freeautomessage.api.Broadcaster;
 import com.j0ach1mmall3.freeautomessage.api.Sign;
 import com.j0ach1mmall3.freeautomessage.api.SignsBroadcaster;
 import com.j0ach1mmall3.jlib.methods.General;
@@ -9,8 +10,8 @@ import com.j0ach1mmall3.jlib.storage.file.yaml.ConfigLoader;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
@@ -18,20 +19,26 @@ import java.util.stream.Collectors;
  */
 public class Signs extends ConfigLoader {
     private final boolean enabled;
-    private final List<SignsBroadcaster> broadcasters;
+    private final List<Broadcaster> broadcasters;
     public Signs(Main plugin) {
         super("signs.yml", plugin);
         this.enabled = this.config.getBoolean("Enabled");
         this.broadcasters = this.getBroadcasters();
         if(this.enabled) {
-            this.broadcasters.forEach(broadcaster -> new BroadcastScheduler(broadcaster).runTaskTimer(plugin, 0, broadcaster.getInterval()));
+            for(Broadcaster broadcaster : this.broadcasters) {
+                new BroadcastScheduler(broadcaster).runTaskTimer(plugin, 0, broadcaster.getInterval());
+            }
             if(plugin.getBabies().getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Started broadcasting Signs messages!", ChatColor.GREEN);
         }
         if(plugin.getBabies().getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Signs config successfully loaded!", ChatColor.GREEN);
     }
 
-    private List<SignsBroadcaster> getBroadcasters() {
-        return this.customConfig.getKeys("SignsBroadcasters").stream().map(this::getBroadcasterByIdentifier).collect(Collectors.toList());
+    private List<Broadcaster> getBroadcasters() {
+        List<Broadcaster> broadcasters = new ArrayList<>();
+        for(String s : this.customConfig.getKeys("SignsBroadcasters")) {
+            broadcasters.add(this.getBroadcasterByIdentifier(s));
+        }
+        return broadcasters;
     }
 
     private SignsBroadcaster getBroadcasterByIdentifier(String identifier) {

@@ -6,4 +6,6 @@ package com.j0ach1mmall3.freeautomessage.api;
  */
 public interface Broadcaster {
     void broadcast();
+
+    int getInterval();
 }

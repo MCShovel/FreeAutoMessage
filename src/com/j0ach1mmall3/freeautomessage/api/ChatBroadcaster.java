@@ -89,7 +89,9 @@ public class ChatBroadcaster implements Broadcaster {
             id = this.count;
             this.count++;
         }
-        Bukkit.getOnlinePlayers().stream().filter(p -> p.hasPermission(this.permission) && this.enabledWorlds.contains(p.getWorld().getName())).forEach(p -> this.sendMessage(p, this.messages.get(id)));
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            if(p.hasPermission(this.permission) && this.enabledWorlds.contains(p.getWorld().getName())) this.sendMessage(p, this.messages.get(id));
+        }
     }
 
     private void sendMessage(Player p, String message) {

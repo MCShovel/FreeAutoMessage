@@ -1,14 +1,24 @@
 package com.j0ach1mmall3.freeautomessage;
 
 import com.j0ach1mmall3.freeautomessage.commands.FAMCommandHandler;
-import com.j0ach1mmall3.freeautomessage.config.*;
-import com.j0ach1mmall3.jlib.integration.MetricsLite;
+import com.j0ach1mmall3.freeautomessage.config.Actionbar;
+import com.j0ach1mmall3.freeautomessage.config.Bossbar;
+import com.j0ach1mmall3.freeautomessage.config.Chat;
+import com.j0ach1mmall3.freeautomessage.config.Command;
+import com.j0ach1mmall3.freeautomessage.config.Config;
+import com.j0ach1mmall3.freeautomessage.config.Signs;
+import com.j0ach1mmall3.freeautomessage.config.Subtitle;
+import com.j0ach1mmall3.freeautomessage.config.Tablist;
+import com.j0ach1mmall3.freeautomessage.config.Title;
+import com.j0ach1mmall3.freeautomessage.listeners.PlayerListener;
 import com.j0ach1mmall3.jlib.integration.updatechecker.AsyncUpdateChecker;
+import com.j0ach1mmall3.jlib.integration.updatechecker.UpdateCheckerResult;
 import com.j0ach1mmall3.jlib.methods.General;
 import com.j0ach1mmall3.jlib.methods.ReflectionAPI;
+import com.j0ach1mmall3.jlib.storage.database.CallbackHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.PluginManager;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
@@ -37,38 +47,30 @@ public class Main extends JavaPlugin {
         if(this.config.getLoggingLevel() >= 2) General.sendColoredMessage(this, "You are running Bukkit version " + BUKKIT_VERSION + " (MC " + MINECRAFT_VERSION + ")", ChatColor.GOLD);
         if(this.config.getUpdateChecker()) {
             AsyncUpdateChecker checker = new AsyncUpdateChecker(this, 11191, this.getDescription().getVersion());
-            checker.checkUpdate(updateCheckerResult -> {
-                switch (updateCheckerResult.getType()) {
-                    case NEW_UPDATE:
-                        if(this.config.getLoggingLevel() >= 1) {
-                            General.sendColoredMessage(Main.this, "A new update is available!", ChatColor.GOLD);
-                            General.sendColoredMessage(Main.this, "Version " + updateCheckerResult.getNewVersion() + " (Current: " + Main.this.getDescription().getVersion() + ")", ChatColor.GOLD);
-                        }
-                        break;
-                    case UP_TO_DATE:
-                        if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(Main.this, "You are up to date!", ChatColor.GREEN);
-                        break;
-                    case ERROR:
-                        if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(Main.this, "An error occured while trying to check for updates on spigotmc.org!", ChatColor.RED);
-                        break;
+            checker.checkUpdate(new CallbackHandler<UpdateCheckerResult>() {
+                @Override
+                public void callback(UpdateCheckerResult updateCheckerResult) {
+                    switch (updateCheckerResult.getType()) {
+                        case NEW_UPDATE:
+                            if(Main.this.config.getLoggingLevel() >= 1) {
+                                General.sendColoredMessage(Main.this, "A new update is available!", ChatColor.GOLD);
+                                General.sendColoredMessage(Main.this, "Version " + updateCheckerResult.getNewVersion() + " (Current: " + Main.this.getDescription().getVersion() + ")", ChatColor.GOLD);
+                            }
+                            break;
+                        case UP_TO_DATE:
+                            if(Main.this.config.getLoggingLevel() >= 1) General.sendColoredMessage(Main.this, "You are up to date!", ChatColor.GREEN);
+                            break;
+                        case ERROR:
+                            if(Main.this.config.getLoggingLevel() >= 1) General.sendColoredMessage(Main.this, "An error occured while trying to check for updates on spigotmc.org!", ChatColor.RED);
+                            break;
+                    }
                 }
             });
         }
-        try {
-            MetricsLite metricsLite = new MetricsLite(this);
-            metricsLite.start();
-        } catch (Exception e) {
-            if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(Main.this, "An error occured while starting MetricsLite!", ChatColor.RED);
-            e.printStackTrace();
-        }
-        PluginManager pm = this.getServer().getPluginManager();
-        if(pm.isPluginEnabled("BossBarAPI")) {
+        if(this.getServer().getPluginManager().isPluginEnabled("BossBarAPI")) {
             if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "Successfully hooked into BossBarAPI for extended functionality", ChatColor.GREEN);
             this.bossBarAPI = true;
-        } else {
-            if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "BossBarAPI was not found! Bossbar Broadcasters will not work!", ChatColor.GOLD);
-            this.bossBarAPI = false;
-        }
+        } else if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "BossBarAPI was not found! Bossbar Broadcasters will not work!", ChatColor.GOLD);
         if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "Loading configs...", ChatColor.GREEN);
         this.actionbar = new Actionbar(this);
         this.bossBar = new Bossbar(this);
@@ -79,19 +81,20 @@ public class Main extends JavaPlugin {
         this.tablist = new Tablist(this);
         this.title = new Title(this);
         if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "Loaded all configs!", ChatColor.GREEN);
+        if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "Registering listener...", ChatColor.GREEN);
+        new PlayerListener(this);
         if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "Registering command...", ChatColor.GREEN);
         new FAMCommandHandler(this).registerCommand(new com.j0ach1mmall3.jlib.commands.Command(this, "FreeAutoMessage", Arrays.asList("reload", "addsign", "removesign", "listsigns"), "/fam reload, /fam addsign, /fam removesign, /fam listsigns", this.config.getNoPermissionMessage()));
-        if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "Registered command!", ChatColor.GREEN);
         if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "Done!", ChatColor.GREEN);
     }
 
     public void onDisable() {
-        if(this.bossBar.isEnabled()) Bukkit.getOnlinePlayers().forEach(org.inventivetalent.bossbar.BossBarAPI::removeBar);
+        if(this.bossBar.isEnabled()) {
+            for(Player p : Bukkit.getOnlinePlayers()) {
+                org.inventivetalent.bossbar.BossBarAPI.removeBar(p);
+            }
+        }
         Bukkit.getScheduler().cancelTasks(this);
-    }
-
-    public boolean getBossBarAPI() {
-        return this.bossBarAPI;
     }
 
     public void reload() {

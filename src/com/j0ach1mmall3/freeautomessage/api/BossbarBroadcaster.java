@@ -87,7 +87,9 @@ public class BossbarBroadcaster implements Broadcaster {
             id = this.count;
             this.count++;
         }
-        Bukkit.getOnlinePlayers().stream().filter(p -> p.hasPermission(this.permission) && this.enabledWorlds.contains(p.getWorld().getName())).forEach(p -> this.displayPlayer(p, this.messages.get(id)));
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            if(p.hasPermission(this.permission) && this.enabledWorlds.contains(p.getWorld().getName())) this.displayPlayer(p, this.messages.get(id));
+        }
     }
 
     private void displayPlayer(Player p, String message) {
