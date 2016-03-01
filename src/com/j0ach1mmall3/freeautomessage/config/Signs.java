@@ -7,8 +7,10 @@ import com.j0ach1mmall3.freeautomessage.api.Sign;
 import com.j0ach1mmall3.freeautomessage.api.SignsBroadcaster;
 import com.j0ach1mmall3.jlib.methods.General;
 import com.j0ach1mmall3.jlib.storage.file.yaml.ConfigLoader;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,15 @@ import java.util.List;
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
  * @since 19/08/2015
  */
-public class Signs extends ConfigLoader {
+public final class Signs extends ConfigLoader {
+    private static final List<String> ALL_WORLDS = new ArrayList<>();
+
+    static {
+        for(World w : Bukkit.getWorlds()) {
+            ALL_WORLDS.add(w.getName());
+        }
+    }
+
     private final boolean enabled;
     private final List<Broadcaster> broadcasters;
     public Signs(Main plugin) {
@@ -42,13 +52,15 @@ public class Signs extends ConfigLoader {
     }
 
     private SignsBroadcaster getBroadcasterByIdentifier(String identifier) {
-        String path = "SignsBroadcasters." + identifier + ".";
+        String path = "SignsBroadcasters." + identifier + '.';
         return new SignsBroadcaster(
                 identifier,
                 this.config.getBoolean(path + "Random"),
-                this.config.getStringList(path + "Signs"),
                 this.config.getInt(path + "Interval"),
-                this.config.getStringList(path + "Messages")
+                this.config.getStringList(path + "Messages"),
+                ALL_WORLDS,
+                this.config.getString(path + "Permission"),
+                this.config.getStringList(path + "Signs")
         );
     }
 
@@ -80,6 +92,6 @@ public class Signs extends ConfigLoader {
     }
 
     private String serializeLocation(Location l) {
-        return l.getWorld().getName() + "/" + String.valueOf(l.getBlockX()) + "/" + String.valueOf(l.getBlockY()) + "/" + String.valueOf(l.getBlockZ());
+        return l.getWorld().getName() + '/' + String.valueOf(l.getBlockX()) + '/' + String.valueOf(l.getBlockY()) + '/' + String.valueOf(l.getBlockZ());
     }
 }

@@ -15,7 +15,7 @@ import java.util.List;
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
  * @since 12/12/15
  */
-public class Command extends ConfigLoader {
+public final class Command extends ConfigLoader {
     private final boolean enabled;
     private final List<Broadcaster> broadcasters;
     public Command(Main plugin) {
@@ -40,7 +40,7 @@ public class Command extends ConfigLoader {
     }
 
     private CommandBroadcaster getBroadcasterByIdentifier(String identifier) {
-        String path = "CommandBroadcasters." + identifier + ".";
+        String path = "CommandBroadcasters." + identifier + '.';
         return new CommandBroadcaster(
                 identifier,
                 this.config.getBoolean(path + "Random"),

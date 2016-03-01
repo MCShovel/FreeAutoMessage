@@ -16,7 +16,7 @@ import java.util.List;
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
  * @since 19/08/2015
  */
-public class Subtitle extends ConfigLoader {
+public final class Subtitle extends ConfigLoader {
     private boolean enabled;
     private final List<Broadcaster> broadcasters;
     public Subtitle(Main plugin) {
@@ -45,17 +45,16 @@ public class Subtitle extends ConfigLoader {
     }
 
     private SubtitleBroadcaster getBroadcasterByIdentifier(String identifier) {
-        String path = "SubtitleBroadcasters." + identifier + ".";
-        return new SubtitleBroadcaster(
-                identifier,
+        String path = "SubtitleBroadcasters." + identifier + '.';
+        return new SubtitleBroadcaster(identifier,
                 this.config.getBoolean(path + "Random"),
-                this.config.getStringList(path + "EnabledWorlds"),
                 this.config.getInt(path + "Interval"),
+                this.config.getStringList(path + "Messages"),
+                this.config.getStringList(path + "EnabledWorlds"),
                 this.config.getString(path + "Permission"),
                 this.config.getInt(path + "FadeIn"),
                 this.config.getInt(path + "Stay"),
-                this.config.getInt(path + "FadeOut"),
-                this.config.getStringList(path + "Messages")
+                this.config.getInt(path + "FadeOut")
         );
     }
 }

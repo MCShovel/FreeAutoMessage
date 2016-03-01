@@ -2,101 +2,40 @@ package com.j0ach1mmall3.freeautomessage.api;
 
 import com.j0ach1mmall3.jlib.integration.Placeholders;
 import com.j0ach1mmall3.jlib.methods.Parsing;
-import com.j0ach1mmall3.jlib.methods.Random;
 import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
-import org.inventivetalent.bossbar.BossBarAPI;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
  * @since 19/08/2015
  */
-public class BossbarBroadcaster implements Broadcaster {
-    private String identifier;
-    private boolean random;
-    private List<String> enabledWorlds;
-    private int interval;
-    private String permission;
-    private List<String> messages;
-    private int count = 0;
+public final class BossbarBroadcaster extends PlayerBroadcaster {
+    private final Map<Player, BossBar> previous = new HashMap<>();
 
-    public BossbarBroadcaster(String identifier, boolean random, List<String> enabledWorlds, int interval, String permission, List<String> messages) {
-        this.identifier = identifier;
-        this.random = random;
-        this.enabledWorlds = enabledWorlds;
-        this.interval = interval;
-        this.permission = permission;
-        this.messages = messages;
+    public BossbarBroadcaster(String identifier, boolean random, int interval, List<String> messages, List<String> enabledWorlds, String permission) {
+        super(identifier, random, interval, messages, enabledWorlds, permission);
     }
 
-    public String getIdentifier() {
-        return this.identifier;
+    @Override
+    protected void broadcastInternal(Player p, String message) {
+        String[] splitted = message.split("\\|");
+        if(this.previous.containsKey(p)) this.previous.get(p).removeAll();
+        BossBar bossBar = Bukkit.getServer().createBossBar(Placeholders.parse(splitted[0], p), BarColor.valueOf(splitted[2]), BarStyle.valueOf(splitted[3]));
+        bossBar.setProgress(Parsing.parseDouble(splitted[1]) / 100);
+        bossBar.addPlayer(p);
+        this.previous.put(p, bossBar);
     }
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-
-    public boolean getRandom() {
-        return this.random;
-    }
-
-    public void setRandom(boolean random) {
-        this.random = random;
-    }
-
-    public List<String> getEnabledWorlds() {
-        return this.enabledWorlds;
-    }
-
-    public void setEnabledWorlds(List<String> enabledWorlds) {
-        this.enabledWorlds = enabledWorlds;
-    }
-
-    public int getInterval() {
-        return this.interval;
-    }
-
-    public void setInterval(int interval) {
-        this.interval = interval;
-    }
-
-    public String getPermission() {
-        return this.permission;
-    }
-
-    public void setPermission(String permission) {
-        this.permission = permission;
-    }
-
-    public List<String> getMessages() {
-        return this.messages;
-    }
-
-    public void setMessages(List<String> messages) {
-        this.messages = messages;
-    }
-
-    public void broadcast() {
-        int id;
-        if(this.random) id = Random.getInt(this.messages.size());
-        else {
-            if(this.count >= this.messages.size()) this.count = 0;
-            id = this.count;
-            this.count++;
+    public void cleanup() {
+        for(Map.Entry<Player, BossBar> entry : this.previous.entrySet()) {
+            entry.getValue().removeAll();
         }
-        for(Player p : Bukkit.getOnlinePlayers()) {
-            if(p.hasPermission(this.permission) && this.enabledWorlds.contains(p.getWorld().getName())) this.displayPlayer(p, this.messages.get(id));
-        }
-    }
-
-    private void displayPlayer(Player p, String message) {
-        BossBarAPI.removeBar(p);
-        if(message.contains("|")) {
-            String[] parts = message.split("\\|");
-            BossBarAPI.setMessage(p, Placeholders.parse(parts[0], p), Parsing.parseFloat(parts[1]));
-        } else BossBarAPI.setMessage(p, Placeholders.parse(message, p));
     }
 }

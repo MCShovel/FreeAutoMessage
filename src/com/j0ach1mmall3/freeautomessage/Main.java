@@ -10,7 +10,6 @@ import com.j0ach1mmall3.freeautomessage.config.Signs;
 import com.j0ach1mmall3.freeautomessage.config.Subtitle;
 import com.j0ach1mmall3.freeautomessage.config.Tablist;
 import com.j0ach1mmall3.freeautomessage.config.Title;
-import com.j0ach1mmall3.freeautomessage.listeners.PlayerListener;
 import com.j0ach1mmall3.jlib.integration.updatechecker.AsyncUpdateChecker;
 import com.j0ach1mmall3.jlib.integration.updatechecker.UpdateCheckerResult;
 import com.j0ach1mmall3.jlib.methods.General;
@@ -18,7 +17,6 @@ import com.j0ach1mmall3.jlib.methods.ReflectionAPI;
 import com.j0ach1mmall3.jlib.storage.database.CallbackHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
@@ -27,10 +25,9 @@ import java.util.Arrays;
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
  * @since 18/08/2015
  */
-public class Main extends JavaPlugin {
+public final class Main extends JavaPlugin {
     public static final String BUKKIT_VERSION = Bukkit.getBukkitVersion().split("\\-")[0];
     public static final String MINECRAFT_VERSION = ReflectionAPI.getNmsVersion();
-    private boolean bossBarAPI;
     private Actionbar actionbar;
     private Bossbar bossBar;
     private Chat chat;
@@ -40,21 +37,22 @@ public class Main extends JavaPlugin {
     private Subtitle subtitle;
     private Tablist tablist;
     private Title title;
+    @Override
     public void onEnable() {
         this.config = new Config(this);
         if(this.config.getLoggingLevel() >= 2 && !this.config.getUpdateChecker()) General.sendColoredMessage(this, "Update Checking is not enabled! You will not receive console notifications!", ChatColor.GOLD);
         if(this.config.getLoggingLevel() >= 2) General.sendColoredMessage(this, "Main config successfully loaded!", ChatColor.GREEN);
-        if(this.config.getLoggingLevel() >= 2) General.sendColoredMessage(this, "You are running Bukkit version " + BUKKIT_VERSION + " (MC " + MINECRAFT_VERSION + ")", ChatColor.GOLD);
+        if(this.config.getLoggingLevel() >= 2) General.sendColoredMessage(this, "You are running Bukkit version " + BUKKIT_VERSION + " (MC " + MINECRAFT_VERSION + ')', ChatColor.GOLD);
         if(this.config.getUpdateChecker()) {
             AsyncUpdateChecker checker = new AsyncUpdateChecker(this, 11191, this.getDescription().getVersion());
             checker.checkUpdate(new CallbackHandler<UpdateCheckerResult>() {
                 @Override
-                public void callback(UpdateCheckerResult updateCheckerResult) {
-                    switch (updateCheckerResult.getType()) {
+                public void callback(UpdateCheckerResult o) {
+                    switch (o.getType()) {
                         case NEW_UPDATE:
                             if(Main.this.config.getLoggingLevel() >= 1) {
                                 General.sendColoredMessage(Main.this, "A new update is available!", ChatColor.GOLD);
-                                General.sendColoredMessage(Main.this, "Version " + updateCheckerResult.getNewVersion() + " (Current: " + Main.this.getDescription().getVersion() + ")", ChatColor.GOLD);
+                                General.sendColoredMessage(Main.this, "Version " + o.getNewVersion() + " (Current: " + Main.this.getDescription().getVersion() + ')', ChatColor.GOLD);
                             }
                             break;
                         case UP_TO_DATE:
@@ -67,10 +65,6 @@ public class Main extends JavaPlugin {
                 }
             });
         }
-        if(this.getServer().getPluginManager().isPluginEnabled("BossBarAPI")) {
-            if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "Successfully hooked into BossBarAPI for extended functionality", ChatColor.GREEN);
-            this.bossBarAPI = true;
-        } else if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "BossBarAPI was not found! Bossbar Broadcasters will not work!", ChatColor.GOLD);
         if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "Loading configs...", ChatColor.GREEN);
         this.actionbar = new Actionbar(this);
         this.bossBar = new Bossbar(this);
@@ -81,24 +75,20 @@ public class Main extends JavaPlugin {
         this.tablist = new Tablist(this);
         this.title = new Title(this);
         if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "Loaded all configs!", ChatColor.GREEN);
-        if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "Registering listener...", ChatColor.GREEN);
-        new PlayerListener(this);
         if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "Registering command...", ChatColor.GREEN);
         new FAMCommandHandler(this).registerCommand(new com.j0ach1mmall3.jlib.commands.Command(this, "FreeAutoMessage", Arrays.asList("reload", "addsign", "removesign", "listsigns"), "/fam reload, /fam addsign, /fam removesign, /fam listsigns", this.config.getNoPermissionMessage()));
         if(this.config.getLoggingLevel() >= 1) General.sendColoredMessage(this, "Done!", ChatColor.GREEN);
     }
 
+    @Override
     public void onDisable() {
-        if(this.bossBar.isEnabled()) {
-            for(Player p : Bukkit.getOnlinePlayers()) {
-                org.inventivetalent.bossbar.BossBarAPI.removeBar(p);
-            }
-        }
         Bukkit.getScheduler().cancelTasks(this);
+        this.bossBar.cleanup();
     }
 
     public void reload() {
         Bukkit.getScheduler().cancelTasks(this);
+        this.bossBar.cleanup();
         this.actionbar = new Actionbar(this);
         this.bossBar = new Bossbar(this);
         this.chat = new Chat(this);
@@ -107,10 +97,6 @@ public class Main extends JavaPlugin {
         this.subtitle = new Subtitle(this);
         this.tablist = new Tablist(this);
         this.title = new Title(this);
-    }
-
-    public boolean isBossBarAPI() {
-        return this.bossBarAPI;
     }
 
     public Actionbar getActionbar() {

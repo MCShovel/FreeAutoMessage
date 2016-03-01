@@ -16,7 +16,7 @@ import java.util.List;
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
  * @since 19/08/2015
  */
-public class Title extends ConfigLoader {
+public final class Title extends ConfigLoader {
     private boolean enabled;
     private final List<Broadcaster> broadcasters;
     public Title(Main plugin) {
@@ -45,17 +45,17 @@ public class Title extends ConfigLoader {
     }
 
     private TitleBroadcaster getBroadcasterByIdentifier(String identifier) {
-        String path = "TitleBroadcasters." + identifier + ".";
+        String path = "TitleBroadcasters." + identifier + '.';
         return new TitleBroadcaster(
                 identifier,
                 this.config.getBoolean(path + "Random"),
-                this.config.getStringList(path + "EnabledWorlds"),
                 this.config.getInt(path + "Interval"),
+                this.config.getStringList(path + "Messages"),
+                this.config.getStringList(path + "EnabledWorlds"),
                 this.config.getString(path + "Permission"),
                 this.config.getInt(path + "FadeIn"),
                 this.config.getInt(path + "Stay"),
-                this.config.getInt(path + "FadeOut"),
-                this.config.getStringList(path + "Messages")
+                this.config.getInt(path + "FadeOut")
         );
     }
 }

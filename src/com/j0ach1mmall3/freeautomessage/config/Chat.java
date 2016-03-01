@@ -16,7 +16,7 @@ import java.util.List;
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
  * @since 19/08/2015
  */
-public class Chat extends ConfigLoader {
+public final class Chat extends ConfigLoader {
     private final boolean enabled;
     private boolean json;
     private final List<Broadcaster> broadcasters;
@@ -47,14 +47,14 @@ public class Chat extends ConfigLoader {
     }
 
     private ChatBroadcaster getBroadcasterByIdentifier(String identifier) {
-        String path = "ChatBroadcasters." + identifier + ".";
+        String path = "ChatBroadcasters." + identifier + '.';
         return new ChatBroadcaster(
                 identifier,
                 this.config.getBoolean(path + "Random"),
-                this.config.getStringList(path + "EnabledWorlds"),
                 this.config.getInt(path + "Interval"),
-                this.config.getString(path + "Permission"),
                 this.config.getStringList(path + "Messages"),
+                this.config.getStringList(path + "EnabledWorlds"),
+                this.config.getString(path + "Permission"),
                 this.json
         );
     }

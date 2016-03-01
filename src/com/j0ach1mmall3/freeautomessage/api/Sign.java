@@ -9,10 +9,10 @@ import java.util.List;
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
  * @since 19/08/2015
  */
-public class Sign {
+public final class Sign {
     private final Main plugin;
-    private String broadcasterIdentifier;
-    private Location location;
+    private final String broadcasterIdentifier;
+    private final Location location;
 
     public Sign(Main plugin, String broadcasterIdentifier, Location location) {
         this.plugin = plugin;
@@ -24,16 +24,8 @@ public class Sign {
         return this.broadcasterIdentifier;
     }
 
-    public void setBroadcasterIdentifier(String broadcasterIdentifier) {
-        this.broadcasterIdentifier = broadcasterIdentifier;
-    }
-
     public Location getLocation() {
         return this.location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
     }
 
     public void add() {
