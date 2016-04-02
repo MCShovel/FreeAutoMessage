@@ -20,11 +20,13 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>LATEST</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.j0ach1mmall3</groupId>
             <artifactId>JLib</artifactId>
             <version>LATEST</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <properties>
@@ -36,29 +38,9 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <finalName>FreeAutoMessage</finalName>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <configuration>
-                    <artifactSet>
-                        <includes>
-                            <include>plugin.yml</include>
-                            <include>config.yml</include>
-                            <include>actionbar.yml</include>
-                            <include>bossbar.yml</include>
-                            <include>chat.yml</include>
-                            <include>command.yml</include>
-                            <include>signs.yml</include>
-                            <include>subtitle.yml</include>
-                            <include>tablist.yml</include>
-                            <include>title.yml</include>
-                        </includes>
-                    </artifactSet>
+                    <finalName>FreeAutoMessage</finalName>
                 </configuration>
                 <executions>
                     <execution>
