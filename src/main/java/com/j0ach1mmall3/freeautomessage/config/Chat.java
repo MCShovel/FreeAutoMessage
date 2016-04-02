@@ -1,61 +1,43 @@
 package com.j0ach1mmall3.freeautomessage.config;
 
-import com.j0ach1mmall3.freeautomessage.BroadcastScheduler;
 import com.j0ach1mmall3.freeautomessage.Main;
 import com.j0ach1mmall3.freeautomessage.api.Broadcaster;
 import com.j0ach1mmall3.freeautomessage.api.ChatBroadcaster;
-import com.j0ach1mmall3.jlib.methods.General;
+import com.j0ach1mmall3.jlib.logging.JLogger;
 import com.j0ach1mmall3.jlib.methods.ReflectionAPI;
-import com.j0ach1mmall3.jlib.storage.file.yaml.ConfigLoader;
 import org.bukkit.ChatColor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
  * @since 19/08/2015
  */
-public final class Chat extends ConfigLoader {
-    private final boolean enabled;
-    private boolean json;
-    private final List<Broadcaster> broadcasters;
+public final class Chat extends BroadcasterConfig {
+    private final boolean json;
     public Chat(Main plugin) {
-        super("chat.yml", plugin);
-        this.enabled = this.config.getBoolean("Enabled");
-        this.json = this.config.getBoolean("Json");
-        if(this.json && !ReflectionAPI.verBiggerThan(1, 7)){
-            if(plugin.getBabies().getLoggingLevel() >= 1) General.sendColoredMessage(plugin, "It seems that Json Chat formatting is enabled in the config, however the server is running 1.6 or lower! Fixing that for you :)", ChatColor.RED);
-            this.json = false;
+        super("chat.yml", plugin, "Chat");
+        boolean json = this.config.getBoolean("Json");
+        if(json && !ReflectionAPI.verBiggerThan(1, 7)){
+            plugin.getjLogger().log(ChatColor.RED + "Json Chat formatting is enabled in the config, however the server is running 1.6 or lower. Adjusting that value.", JLogger.LogLevel.MINIMAL);
+            json = false;
         }
-        this.broadcasters = this.getBroadcasters();
-        if(this.enabled) {
-            for(Broadcaster broadcaster : this.broadcasters) {
-                new BroadcastScheduler(broadcaster).runTaskTimer(plugin, 0, broadcaster.getInterval());
-            }
-            if(plugin.getBabies().getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Started broadcasting Chat messages!", ChatColor.GREEN);
-        }
-        if(plugin.getBabies().getLoggingLevel() >= 2) General.sendColoredMessage(plugin, "Chat config successfully loaded!", ChatColor.GREEN);
+        this.json = json;
     }
 
-    private List<Broadcaster> getBroadcasters() {
-        List<Broadcaster> broadcasters = new ArrayList<>();
-        for(String s : this.customConfig.getKeys("ChatBroadcasters")) {
-            broadcasters.add(this.getBroadcasterByIdentifier(s));
-        }
-        return broadcasters;
-    }
-
-    private ChatBroadcaster getBroadcasterByIdentifier(String identifier) {
+    @Override
+    protected Broadcaster getBroadcasterByIdentifier(String identifier) {
         String path = "ChatBroadcasters." + identifier + '.';
         return new ChatBroadcaster(
+                (Main) this.getStorage().getPlugin(),
                 identifier,
                 this.config.getBoolean(path + "Random"),
                 this.config.getInt(path + "Interval"),
                 this.config.getStringList(path + "Messages"),
                 this.config.getStringList(path + "EnabledWorlds"),
-                this.config.getString(path + "Permission"),
-                this.json
+                this.config.getString(path + "Permission")
         );
+    }
+
+    public boolean isJson() {
+        return this.json;
     }
 }

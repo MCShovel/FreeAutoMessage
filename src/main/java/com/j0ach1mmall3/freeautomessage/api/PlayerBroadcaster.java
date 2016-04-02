@@ -1,5 +1,6 @@
 package com.j0ach1mmall3.freeautomessage.api;
 
+import com.j0ach1mmall3.freeautomessage.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -13,8 +14,8 @@ public abstract class PlayerBroadcaster extends Broadcaster {
     private final List<String> enabledWorlds;
     private final String permission;
 
-    public PlayerBroadcaster(String identifier, boolean random, int interval, List<String> messages, List<String> enabledWorlds, String permission) {
-        super(identifier, random, interval, messages);
+    public PlayerBroadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages, List<String> enabledWorlds, String permission) {
+        super(plugin, identifier, random, interval, messages);
         this.enabledWorlds = enabledWorlds;
         this.permission = permission;
     }

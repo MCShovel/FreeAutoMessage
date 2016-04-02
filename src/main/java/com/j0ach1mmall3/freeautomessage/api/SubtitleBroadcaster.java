@@ -1,5 +1,6 @@
 package com.j0ach1mmall3.freeautomessage.api;
 
+import com.j0ach1mmall3.freeautomessage.Main;
 import com.j0ach1mmall3.jlib.visual.Subtitle;
 import org.bukkit.entity.Player;
 
@@ -14,8 +15,8 @@ public final class SubtitleBroadcaster extends PlayerBroadcaster {
     private final int stay;
     private final int fadeOut;
 
-    public SubtitleBroadcaster(String identifier, boolean random, int interval, List<String> messages, List<String> enabledWorlds, String permission, int fadeIn, int stay, int fadeOut) {
-        super(identifier, random, interval, messages, enabledWorlds, permission);
+    public SubtitleBroadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages, List<String> enabledWorlds, String permission, int fadeIn, int stay, int fadeOut) {
+        super(plugin, identifier, random, interval, messages, enabledWorlds, permission);
         this.fadeIn = fadeIn;
         this.stay = stay;
         this.fadeOut = fadeOut;

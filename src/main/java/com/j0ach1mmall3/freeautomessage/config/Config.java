@@ -1,6 +1,7 @@
 package com.j0ach1mmall3.freeautomessage.config;
 
 import com.j0ach1mmall3.freeautomessage.Main;
+import com.j0ach1mmall3.jlib.logging.JLogger;
 import com.j0ach1mmall3.jlib.storage.file.yaml.ConfigLoader;
 
 /**
@@ -9,22 +10,22 @@ import com.j0ach1mmall3.jlib.storage.file.yaml.ConfigLoader;
  */
 public final class Config extends ConfigLoader {
     private final boolean updateChecker;
-    private final int loggingLevel;
+    private final JLogger.LogLevel logLevel;
     private final String noPermissionMessage;
     public Config(Main plugin) {
         super("config.yml", plugin);
         this.customConfig.saveDefaultConfig();
-        this.loggingLevel = this.config.getInt("LoggingLevel");
+        this.logLevel = JLogger.LogLevel.valueOf(this.config.getString("LogLevel"));
         this.updateChecker = this.config.getBoolean("UpdateChecker");
         this.noPermissionMessage = this.config.getString("NoPermissionMessage");
     }
 
-    public boolean getUpdateChecker() {
+    public boolean isUpdateChecker() {
         return this.updateChecker;
     }
 
-    public int getLoggingLevel() {
-        return this.loggingLevel;
+    public JLogger.LogLevel getLogLevel() {
+        return this.logLevel;
     }
 
     public String getNoPermissionMessage() {

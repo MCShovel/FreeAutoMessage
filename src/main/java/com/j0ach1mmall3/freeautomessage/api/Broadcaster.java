@@ -1,5 +1,6 @@
 package com.j0ach1mmall3.freeautomessage.api;
 
+import com.j0ach1mmall3.freeautomessage.Main;
 import com.j0ach1mmall3.jlib.methods.Random;
 
 import java.util.List;
@@ -9,17 +10,23 @@ import java.util.List;
  * @since 18/08/2015
  */
 public abstract class Broadcaster {
+    protected final Main plugin;
     private final String identifier;
     private final boolean random;
     private final int interval;
     private final List<String> messages;
     private int count;
 
-    public Broadcaster(String identifier, boolean random, int interval, List<String> messages) {
+    public Broadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages) {
+        this.plugin = plugin;
         this.identifier = identifier;
         this.random = random;
         this.interval = interval;
         this.messages = messages;
+    }
+
+    public Main getPlugin() {
+        return this.plugin;
     }
 
     public String getIdentifier() {

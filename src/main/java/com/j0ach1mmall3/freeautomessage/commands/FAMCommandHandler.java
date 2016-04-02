@@ -1,6 +1,7 @@
 package com.j0ach1mmall3.freeautomessage.commands;
 
 import com.j0ach1mmall3.freeautomessage.Main;
+import com.j0ach1mmall3.freeautomessage.config.Config;
 import com.j0ach1mmall3.jlib.commands.CommandHandler;
 import com.j0ach1mmall3.jlib.integration.Placeholders;
 import org.bukkit.ChatColor;
@@ -27,7 +28,7 @@ public final class FAMCommandHandler extends CommandHandler {
     public boolean handleCommand(CommandSender commandSender, String[] strings) {
         if (strings[0].equalsIgnoreCase("reload")) {
             if (!commandSender.hasPermission("fam.reload")) {
-                commandSender.sendMessage(Placeholders.parse(this.plugin.getBabies().getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
+                commandSender.sendMessage(Placeholders.parse(((Config) this.plugin.getBabies()).getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
                 return true;
             }
             this.plugin.reload();
@@ -36,7 +37,7 @@ public final class FAMCommandHandler extends CommandHandler {
         }
         if (strings[0].equalsIgnoreCase("addsign")) {
             if (!commandSender.hasPermission("fam.addsign")) {
-                commandSender.sendMessage(Placeholders.parse(this.plugin.getBabies().getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
+                commandSender.sendMessage(Placeholders.parse(((Config) this.plugin.getBabies()).getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
                 return true;
             }
             if(!(commandSender instanceof Player)) {
@@ -69,7 +70,7 @@ public final class FAMCommandHandler extends CommandHandler {
         }
         if (strings[0].equalsIgnoreCase("removesign")) {
             if (!commandSender.hasPermission("fam.removesign")) {
-                commandSender.sendMessage(Placeholders.parse(this.plugin.getBabies().getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
+                commandSender.sendMessage(Placeholders.parse(((Config) this.plugin.getBabies()).getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
                 return true;
             }
             if(!(commandSender instanceof Player)) {
@@ -102,7 +103,7 @@ public final class FAMCommandHandler extends CommandHandler {
         }
         if (strings[0].equalsIgnoreCase("listsigns")) {
             if (!commandSender.hasPermission("fam.listsigns")) {
-                commandSender.sendMessage(Placeholders.parse(this.plugin.getBabies().getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
+                commandSender.sendMessage(Placeholders.parse(((Config) this.plugin.getBabies()).getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
                 return true;
             }
             if (strings.length < 2) {

@@ -1,5 +1,6 @@
 package com.j0ach1mmall3.freeautomessage.api;
 
+import com.j0ach1mmall3.freeautomessage.Main;
 import com.j0ach1mmall3.jlib.visual.Tab;
 import org.bukkit.entity.Player;
 
@@ -10,8 +11,8 @@ import java.util.List;
  * @since 19/08/2015
  */
 public final class TablistBroadcaster extends PlayerBroadcaster {
-    public TablistBroadcaster(String identifier, boolean random, int interval, List<String> messages, List<String> enabledWorlds, String permission) {
-        super(identifier, random, interval, messages, enabledWorlds, permission);
+    public TablistBroadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages, List<String> enabledWorlds, String permission) {
+        super(plugin, identifier, random, interval, messages, enabledWorlds, permission);
     }
 
     @Override

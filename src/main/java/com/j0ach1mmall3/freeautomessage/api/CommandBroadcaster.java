@@ -1,5 +1,6 @@
 package com.j0ach1mmall3.freeautomessage.api;
 
+import com.j0ach1mmall3.freeautomessage.Main;
 import org.bukkit.Bukkit;
 
 import java.util.List;
@@ -9,8 +10,8 @@ import java.util.List;
  * @since 12/12/15
  */
 public final class CommandBroadcaster extends Broadcaster {
-    public CommandBroadcaster(String identifier, boolean random, int interval, List<String> messages) {
-        super(identifier, random, interval, messages);
+    public CommandBroadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages) {
+        super(plugin, identifier, random, interval, messages);
     }
 
     @Override
