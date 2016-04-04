@@ -21,8 +21,9 @@ public class Tablist extends BroadcasterConfig {
                 this.config.getBoolean(path + "Random"),
                 this.config.getInt(path + "Interval"),
                 this.config.getStringList(path + "Messages"),
-                this.config.getStringList(path + "EnabledWorlds"),
-                this.config.getString(path + "Permission")
+                this.config.getString(path + "Permission"),
+                this.config.getStringList(path + "EnabledWorlds")
+
         );
     }
 }

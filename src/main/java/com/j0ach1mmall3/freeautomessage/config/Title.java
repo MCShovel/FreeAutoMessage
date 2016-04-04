@@ -21,8 +21,8 @@ public final class Title extends BroadcasterConfig {
                 this.config.getBoolean(path + "Random"),
                 this.config.getInt(path + "Interval"),
                 this.config.getStringList(path + "Messages"),
-                this.config.getStringList(path + "EnabledWorlds"),
                 this.config.getString(path + "Permission"),
+                this.config.getStringList(path + "EnabledWorlds"),
                 this.config.getInt(path + "FadeIn"),
                 this.config.getInt(path + "Stay"),
                 this.config.getInt(path + "FadeOut")
