@@ -11,17 +11,11 @@ import java.util.List;
  * @since 1/03/2016
  */
 public abstract class PlayerBroadcaster extends Broadcaster {
-    private final List<String> enabledWorlds;
-    private final String permission;
+    protected final String permission;
 
-    public PlayerBroadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages, List<String> enabledWorlds, String permission) {
+    public PlayerBroadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages, String permission) {
         super(plugin, identifier, random, interval, messages);
-        this.enabledWorlds = enabledWorlds;
         this.permission = permission;
-    }
-
-    public List<String> getEnabledWorlds() {
-        return this.enabledWorlds;
     }
 
     public String getPermission() {
@@ -31,7 +25,7 @@ public abstract class PlayerBroadcaster extends Broadcaster {
     @Override
     protected void broadcast(String message) {
         for(Player p : Bukkit.getOnlinePlayers()) {
-            if(p.hasPermission(this.permission) && this.enabledWorlds.contains(p.getWorld().getName())) this.broadcastInternal(p, message);
+            if(p.hasPermission(this.permission)) this.broadcastInternal(p, message);
         }
     }
 

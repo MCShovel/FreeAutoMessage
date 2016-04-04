@@ -3,11 +3,8 @@ package com.j0ach1mmall3.freeautomessage.config;
 import com.j0ach1mmall3.freeautomessage.Main;
 import com.j0ach1mmall3.freeautomessage.api.Sign;
 import com.j0ach1mmall3.freeautomessage.api.SignsBroadcaster;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,13 +12,9 @@ import java.util.List;
  * @since 19/08/2015
  */
 public final class Signs extends BroadcasterConfig {
-    private final List<String> allWorlds = new ArrayList<>();
 
     public Signs(Main plugin) {
         super("signs.yml", plugin, "Signs");
-        for(World w : Bukkit.getWorlds()) {
-            allWorlds.add(w.getName());
-        }
     }
 
     @Override
@@ -33,7 +26,6 @@ public final class Signs extends BroadcasterConfig {
                 this.config.getBoolean(path + "Random"),
                 this.config.getInt(path + "Interval"),
                 this.config.getStringList(path + "Messages"),
-                allWorlds,
                 this.config.getString(path + "Permission"),
                 this.config.getStringList(path + "Signs")
         );

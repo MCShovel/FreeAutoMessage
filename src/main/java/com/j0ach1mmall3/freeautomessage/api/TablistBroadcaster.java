@@ -10,9 +10,9 @@ import java.util.List;
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
  * @since 19/08/2015
  */
-public final class TablistBroadcaster extends PlayerBroadcaster {
-    public TablistBroadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages, List<String> enabledWorlds, String permission) {
-        super(plugin, identifier, random, interval, messages, enabledWorlds, permission);
+public final class TablistBroadcaster extends WorldsBroadcaster {
+    public TablistBroadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages, String permission, List<String> enabledWorlds) {
+        super(plugin, identifier, random, interval, messages, permission, enabledWorlds);
     }
 
     @Override

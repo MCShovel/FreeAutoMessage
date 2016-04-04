@@ -19,8 +19,8 @@ public final class SignsBroadcaster extends PlayerBroadcaster {
 
     private final List<String> signs;
 
-    public SignsBroadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages, List<String> enabledWorlds, String permission, List<String> signs) {
-        super(plugin, identifier, random, interval, messages, enabledWorlds, permission);
+    public SignsBroadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages, String permission, List<String> signs) {
+        super(plugin, identifier, random, interval, messages, permission);
         this.signs = signs;
     }
 

@@ -10,13 +10,13 @@ import java.util.List;
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
  * @since 18/08/2015
  */
-public final class SubtitleBroadcaster extends PlayerBroadcaster {
+public final class SubtitleBroadcaster extends WorldsBroadcaster {
     private final int fadeIn;
     private final int stay;
     private final int fadeOut;
 
-    public SubtitleBroadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages, List<String> enabledWorlds, String permission, int fadeIn, int stay, int fadeOut) {
-        super(plugin, identifier, random, interval, messages, enabledWorlds, permission);
+    public SubtitleBroadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages, String permission, List<String> enabledWorlds, int fadeIn, int stay, int fadeOut) {
+        super(plugin, identifier, random, interval, messages, permission, enabledWorlds);
         this.fadeIn = fadeIn;
         this.stay = stay;
         this.fadeOut = fadeOut;
