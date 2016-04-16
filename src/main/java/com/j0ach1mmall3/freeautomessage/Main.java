@@ -10,9 +10,11 @@ import com.j0ach1mmall3.freeautomessage.config.Signs;
 import com.j0ach1mmall3.freeautomessage.config.Subtitle;
 import com.j0ach1mmall3.freeautomessage.config.Tablist;
 import com.j0ach1mmall3.freeautomessage.config.Title;
+import com.j0ach1mmall3.jlib.logging.DebugInfo;
 import com.j0ach1mmall3.jlib.logging.JLogger;
 import com.j0ach1mmall3.jlib.methods.ReflectionAPI;
-import com.j0ach1mmall3.jlib.plugin.JlibPlugin;
+import com.j0ach1mmall3.jlib.plugin.JLibPlugin;
+import com.j0ach1mmall3.jlib.storage.file.yaml.ConfigLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
@@ -22,7 +24,7 @@ import java.util.Arrays;
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
  * @since 18/08/2015
  */
-public final class Main extends JlibPlugin {
+public final class Main extends JLibPlugin {
     public static final String BUKKIT_VERSION = Bukkit.getBukkitVersion().split("\\-")[0];
     public static final String MINECRAFT_VERSION = ReflectionAPI.getNmsVersion();
     private Actionbar actionbar;
@@ -43,14 +45,7 @@ public final class Main extends JlibPlugin {
         this.jLogger.log(ChatColor.GREEN + "You are running Bukkit version " + BUKKIT_VERSION + " (MC " + MINECRAFT_VERSION + ')', JLogger.LogLevel.EXTENDED);
         if(((Config) this.config).isUpdateChecker()) this.checkUpdate(11191);
         this.jLogger.log(ChatColor.GREEN + "Loading configs...", JLogger.LogLevel.EXTENDED);
-        this.actionbar = new Actionbar(this);
-        this.bossBar = new Bossbar(this);
-        this.chat = new Chat(this);
-        this.command = new Command(this);
-        this.signs = new Signs(this);
-        this.subtitle = new Subtitle(this);
-        this.tablist = new Tablist(this);
-        this.title = new Title(this);
+        this.reload();
         this.jLogger.log(ChatColor.GREEN + "Loaded all configs!", JLogger.LogLevel.EXTENDED);
         this.jLogger.log(ChatColor.GREEN + "Registering command...", JLogger.LogLevel.EXTENDED);
         new FAMCommandHandler(this).registerCommand(new com.j0ach1mmall3.jlib.commands.Command(this, "FreeAutoMessage", Arrays.asList("reload", "addsign", "removesign", "listsigns"), "/fam reload, /fam addsign, /fam removesign, /fam listsigns", ((Config) this.config).getNoPermissionMessage()));
@@ -65,7 +60,7 @@ public final class Main extends JlibPlugin {
 
     public void reload() {
         Bukkit.getScheduler().cancelTasks(this);
-        this.bossBar.cleanup();
+        if(this.bossBar != null) this.bossBar.cleanup();
         this.actionbar = new Actionbar(this);
         this.bossBar = new Bossbar(this);
         this.chat = new Chat(this);
@@ -74,6 +69,16 @@ public final class Main extends JlibPlugin {
         this.subtitle = new Subtitle(this);
         this.tablist = new Tablist(this);
         this.title = new Title(this);
+        this.registerDebugInfo(new DebugInfo(null, new ConfigLoader[]{
+                this.actionbar,
+                this.bossBar,
+                this.chat,
+                this.command,
+                this.signs,
+                this.subtitle,
+                this.tablist,
+                this.title
+        }));
     }
 
     public Actionbar getActionbar() {
