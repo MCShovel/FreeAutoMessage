@@ -11,6 +11,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.EnumSet;
 import java.util.Set;
 
 /**
@@ -28,7 +29,7 @@ public final class FAMCommandHandler extends CommandHandler {
     public boolean handleCommand(CommandSender commandSender, String[] strings) {
         if (strings[0].equalsIgnoreCase("reload")) {
             if (!commandSender.hasPermission("fam.reload")) {
-                commandSender.sendMessage(Placeholders.parse(((Config) this.plugin.getBabies()).getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
+                commandSender.sendMessage(Placeholders.parse(this.plugin.getBabies().getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
                 return true;
             }
             this.plugin.reload();
@@ -37,7 +38,7 @@ public final class FAMCommandHandler extends CommandHandler {
         }
         if (strings[0].equalsIgnoreCase("addsign")) {
             if (!commandSender.hasPermission("fam.addsign")) {
-                commandSender.sendMessage(Placeholders.parse(((Config) this.plugin.getBabies()).getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
+                commandSender.sendMessage(Placeholders.parse(this.plugin.getBabies().getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
                 return true;
             }
             if(!(commandSender instanceof Player)) {
@@ -70,7 +71,7 @@ public final class FAMCommandHandler extends CommandHandler {
         }
         if (strings[0].equalsIgnoreCase("removesign")) {
             if (!commandSender.hasPermission("fam.removesign")) {
-                commandSender.sendMessage(Placeholders.parse(((Config) this.plugin.getBabies()).getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
+                commandSender.sendMessage(Placeholders.parse(this.plugin.getBabies().getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
                 return true;
             }
             if(!(commandSender instanceof Player)) {
@@ -78,7 +79,7 @@ public final class FAMCommandHandler extends CommandHandler {
                 return true;
             }
             Player p = (Player) commandSender;
-            Block b = p.getTargetBlock((Set<Material>) null, 5);
+            Block b = p.getTargetBlock(EnumSet.of(Material.AIR), 5);
             if(!(b.getState() instanceof Sign)) {
                 p.sendMessage(ChatColor.RED + "You need to be looking at a placed Sign!");
                 return true;
@@ -103,7 +104,7 @@ public final class FAMCommandHandler extends CommandHandler {
         }
         if (strings[0].equalsIgnoreCase("listsigns")) {
             if (!commandSender.hasPermission("fam.listsigns")) {
-                commandSender.sendMessage(Placeholders.parse(((Config) this.plugin.getBabies()).getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
+                commandSender.sendMessage(Placeholders.parse(this.plugin.getBabies().getNoPermissionMessage(), commandSender instanceof Player?(Player) commandSender :null));
                 return true;
             }
             if (strings.length < 2) {

@@ -16,7 +16,6 @@ public final class Subtitle extends BroadcasterConfig {
     protected SubtitleBroadcaster getBroadcasterByIdentifier(String identifier) {
         String path = "SubtitleBroadcasters." + identifier + '.';
         return new SubtitleBroadcaster(
-                (Main) this.getStorage().getPlugin(),
                 identifier,
                 this.config.getBoolean(path + "Random"),
                 this.config.getInt(path + "Interval"),

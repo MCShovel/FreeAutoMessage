@@ -24,7 +24,7 @@ import java.util.Arrays;
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
  * @since 18/08/2015
  */
-public final class Main extends JLibPlugin {
+public final class Main extends JLibPlugin<Config> {
     public static final String BUKKIT_VERSION = Bukkit.getBukkitVersion().split("\\-")[0];
     public static final String MINECRAFT_VERSION = ReflectionAPI.getNmsVersion();
     private Actionbar actionbar;
@@ -39,16 +39,16 @@ public final class Main extends JLibPlugin {
     @Override
     public void onEnable() {
         this.config = new Config(this);
-        this.jLogger.setLogLevel(((Config) this.config).getLogLevel());
-        if(((Config) this.config).isUpdateChecker()) this.jLogger.log(ChatColor.GOLD + "Update Checking is not enabled! You will not receive console notifications!", JLogger.LogLevel.NORMAL);
+        this.jLogger.setLogLevel(this.config.getLogLevel());
+        if(this.config.isUpdateChecker()) this.jLogger.log(ChatColor.GOLD + "Update Checking is not enabled! You will not receive console notifications!", JLogger.LogLevel.NORMAL);
         this.jLogger.log(ChatColor.GREEN + "Main config successfully loaded!", JLogger.LogLevel.EXTENDED);
         this.jLogger.log(ChatColor.GREEN + "You are running Bukkit version " + BUKKIT_VERSION + " (MC " + MINECRAFT_VERSION + ')', JLogger.LogLevel.EXTENDED);
-        if(((Config) this.config).isUpdateChecker()) this.checkUpdate(11191);
+        if(this.config.isUpdateChecker()) this.checkUpdate(11191);
         this.jLogger.log(ChatColor.GREEN + "Loading configs...", JLogger.LogLevel.EXTENDED);
         this.reload();
         this.jLogger.log(ChatColor.GREEN + "Loaded all configs!", JLogger.LogLevel.EXTENDED);
         this.jLogger.log(ChatColor.GREEN + "Registering command...", JLogger.LogLevel.EXTENDED);
-        new FAMCommandHandler(this).registerCommand(new com.j0ach1mmall3.jlib.commands.Command(this, "FreeAutoMessage", Arrays.asList("reload", "addsign", "removesign", "listsigns"), "/fam reload, /fam addsign, /fam removesign, /fam listsigns", ((Config) this.config).getNoPermissionMessage()));
+        new FAMCommandHandler(this).registerCommand(new com.j0ach1mmall3.jlib.commands.Command(this, "FreeAutoMessage", Arrays.asList("reload", "addsign", "removesign", "listsigns"), "/fam reload, /fam addsign, /fam removesign, /fam listsigns", this.config.getNoPermissionMessage()));
         this.jLogger.log(ChatColor.GREEN + "Done!", JLogger.LogLevel.NORMAL);
     }
 

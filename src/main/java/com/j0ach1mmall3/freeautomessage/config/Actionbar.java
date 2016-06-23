@@ -17,7 +17,6 @@ public final class Actionbar extends BroadcasterConfig {
     protected Broadcaster getBroadcasterByIdentifier(String identifier) {
         String path = "ActionbarBroadcasters." + identifier + '.';
         return new ActionbarBroadcaster(
-                (Main) this.getStorage().getPlugin(),
                 identifier,
                 this.config.getBoolean(path + "Random"),
                 this.config.getInt(path + "Interval"),

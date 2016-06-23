@@ -1,7 +1,6 @@
 # Should Chat broadcasting be enabled?
 Enabled: true
-# Should Json Chat formatting be enabled? (Note: requires Minecraft version 1.7!)
-Json: true
+
 ChatBroadcasters:
   ExampleChatBroadcaster:
     # Should the order be randomized?
@@ -20,4 +19,6 @@ ChatBroadcasters:
     Messages:
     - '[text]&7-------------------|[text]&6This server uses &dFreeAutoMessage&6, a free Auto Messaging plugin that has some very cool features!|{"text":"Check it out here!","color":"gray","clickEvent":{"action":"open_url","value":"https://www.spigotmc.org/resources/11191/"},"hoverEvent":{"action":"show_text","value":{"text":"","extra":[{"text":"Click to check it out!","color":"dark_purple"}]}}}|[text]&7-------------------'
     - '[text]&dFreeAutoMessage &6supports a lot of broadcasting methods, including &lActionbar, Boss Bar, Chat, Command, Signs, Subtitle, Title and Tablist Broadcasters&6!|[text]&6And all of that, at the cheap price of &l0$&6!'
-DoNotChange: 1.1.0
+    # Should Json Chat formatting be enabled? (Note: requires Minecraft version 1.7!)
+    Json: true
+DoNotChange: 1.3.4

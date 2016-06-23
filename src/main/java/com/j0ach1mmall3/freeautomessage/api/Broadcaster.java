@@ -1,7 +1,8 @@
 package com.j0ach1mmall3.freeautomessage.api;
 
-import com.j0ach1mmall3.freeautomessage.Main;
 import com.j0ach1mmall3.jlib.methods.Random;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
@@ -9,43 +10,38 @@ import java.util.List;
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
  * @since 18/08/2015
  */
-public abstract class Broadcaster {
-    protected final Main plugin;
+public abstract class Broadcaster implements Runnable {
     private final String identifier;
     private final boolean random;
     private final int interval;
     private final List<String> messages;
     private int count;
 
-    public Broadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages) {
-        this.plugin = plugin;
+    public Broadcaster(String identifier, boolean random, int interval, List<String> messages) {
         this.identifier = identifier;
         this.random = random;
         this.interval = interval;
         this.messages = messages;
     }
 
-    public Main getPlugin() {
-        return this.plugin;
-    }
-
-    public String getIdentifier() {
+    public final String getIdentifier() {
         return this.identifier;
     }
 
-    public boolean isRandom() {
+    public final boolean isRandom() {
         return this.random;
     }
 
-    public int getInterval() {
+    public final int getInterval() {
         return this.interval;
     }
 
-    public List<String> getMessages() {
+    public final List<String> getMessages() {
         return this.messages;
     }
 
-    public final void broadcast() {
+    @Override
+    public final void run() {
         int id;
         if(this.random) id = Random.getInt(this.messages.size());
         else {
@@ -54,6 +50,10 @@ public abstract class Broadcaster {
             this.count++;
         }
         this.broadcast(this.messages.get(id));
+    }
+
+    public final void start(Plugin plugin) {
+        Bukkit.getScheduler().runTaskTimer(plugin, this, this.interval, this.interval);
     }
 
     protected abstract void broadcast(String message);

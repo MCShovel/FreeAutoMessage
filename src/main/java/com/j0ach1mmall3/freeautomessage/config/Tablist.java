@@ -16,7 +16,6 @@ public class Tablist extends BroadcasterConfig {
     protected TablistBroadcaster getBroadcasterByIdentifier(String identifier) {
         String path = "TablistBroadcasters." + identifier + '.';
         return new TablistBroadcaster(
-                (Main) this.getStorage().getPlugin(),
                 identifier,
                 this.config.getBoolean(path + "Random"),
                 this.config.getInt(path + "Interval"),

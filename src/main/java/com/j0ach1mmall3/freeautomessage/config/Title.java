@@ -16,7 +16,6 @@ public final class Title extends BroadcasterConfig {
     protected TitleBroadcaster getBroadcasterByIdentifier(String identifier) {
         String path = "TitleBroadcasters." + identifier + '.';
         return new TitleBroadcaster(
-                (Main) this.getStorage().getPlugin(),
                 identifier,
                 this.config.getBoolean(path + "Random"),
                 this.config.getInt(path + "Interval"),

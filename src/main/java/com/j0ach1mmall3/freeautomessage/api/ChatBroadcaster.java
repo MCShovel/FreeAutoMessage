@@ -1,9 +1,9 @@
 package com.j0ach1mmall3.freeautomessage.api;
 
 
-import com.j0ach1mmall3.freeautomessage.Main;
 import com.j0ach1mmall3.jlib.integration.Placeholders;
 import com.j0ach1mmall3.jlib.visual.JsonText;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -13,15 +13,18 @@ import java.util.List;
  * @since 18/08/2015
  */
 public final class ChatBroadcaster extends WorldsBroadcaster {
-    public ChatBroadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages, String permission, List<String> enabledWorlds) {
-        super(plugin, identifier, random, interval, messages, permission, enabledWorlds);
+    private final boolean json;
+
+    public ChatBroadcaster(String identifier, boolean random, int interval, List<String> messages, String permission, List<String> enabledWorlds, boolean json) {
+        super(identifier, random, interval, messages, permission, enabledWorlds);
+        this.json = json;
     }
 
     @Override
     protected void broadcastInternal(Player p, String message) {
         String[] splitted = message.split("\\|");
         for(String s : splitted) {
-            if(this.plugin.getChat().isJson()) new JsonText(p, s).send();
+            if(this.json) new JsonText(p, s).send();
             else p.sendMessage(Placeholders.parse(s, p));
         }
     }

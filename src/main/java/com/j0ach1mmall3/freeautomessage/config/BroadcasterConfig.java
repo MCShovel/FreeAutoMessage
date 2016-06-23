@@ -1,6 +1,5 @@
 package com.j0ach1mmall3.freeautomessage.config;
 
-import com.j0ach1mmall3.freeautomessage.BroadcastScheduler;
 import com.j0ach1mmall3.freeautomessage.Main;
 import com.j0ach1mmall3.freeautomessage.api.Broadcaster;
 import com.j0ach1mmall3.jlib.logging.JLogger;
@@ -15,7 +14,7 @@ import java.util.List;
  * @author j0ach1mmall3 (business.j0ach1mmall3@gmail.com)
  * @since 2/04/2016
  */
-public abstract class BroadcasterConfig extends ConfigLoader {
+public abstract class BroadcasterConfig extends ConfigLoader<Main> {
     private final boolean enabled;
     protected final List<Broadcaster> broadcasters;
 
@@ -25,7 +24,7 @@ public abstract class BroadcasterConfig extends ConfigLoader {
         this.broadcasters = this.getBroadcasters(broadcaster);
         if(this.enabled) {
             for(Broadcaster b : this.broadcasters) {
-                new BroadcastScheduler(b).runTaskTimer(plugin, 0, b.getInterval());
+                b.start(plugin);
             }
             plugin.getjLogger().log(ChatColor.GREEN + "Started " + broadcaster + " broadcasters!", JLogger.LogLevel.EXTENDED);
         }
@@ -45,31 +44,31 @@ public abstract class BroadcasterConfig extends ConfigLoader {
         switch (broadcaster) {
             case "Actionbar":
                 if(enabled && !ReflectionAPI.verBiggerThan(1, 8)) {
-                    ((Main) this.storage.getPlugin()).getjLogger().log(ChatColor.RED + "Actionbar Broadcasting is enabled in the config, but you are running 1.7 or lower. Adjusting that value.", JLogger.LogLevel.MINIMAL);
+                    this.storage.getPlugin().getjLogger().log(ChatColor.RED + "Actionbar Broadcasting is enabled in the config, but you are running 1.7 or lower. Adjusting that value.", JLogger.LogLevel.MINIMAL);
                     enabled = false;
                 }
                 break;
             case "Bossbar":
                 if(enabled && !ReflectionAPI.verBiggerThan(1, 9)) {
-                    ((Main) this.storage.getPlugin()).getjLogger().log(ChatColor.RED + "Bossbar Broadcasting is enabled in the config, but you are running 1.8 or lower. Adjusting that value.", JLogger.LogLevel.MINIMAL);
+                    this.storage.getPlugin().getjLogger().log(ChatColor.RED + "Bossbar Broadcasting is enabled in the config, but you are running 1.8 or lower. Adjusting that value.", JLogger.LogLevel.MINIMAL);
                     enabled = false;
                 }
                 break;
             case "Title":
                 if(enabled && !ReflectionAPI.verBiggerThan(1, 8)) {
-                    ((Main) this.storage.getPlugin()).getjLogger().log(ChatColor.RED + "Title Broadcasting is enabled in the config, but you are running 1.7 or lower. Adjusting that value.", JLogger.LogLevel.MINIMAL);
+                    this.storage.getPlugin().getjLogger().log(ChatColor.RED + "Title Broadcasting is enabled in the config, but you are running 1.7 or lower. Adjusting that value.", JLogger.LogLevel.MINIMAL);
                     enabled = false;
                 }
                 break;
             case "Tablist":
                 if(enabled && !ReflectionAPI.verBiggerThan(1, 8)) {
-                    ((Main) this.storage.getPlugin()).getjLogger().log(ChatColor.RED + "Tablist Broadcasting is enabled in the config, but you are running 1.7 or lower. Adjusting that value.", JLogger.LogLevel.MINIMAL);
+                    this.storage.getPlugin().getjLogger().log(ChatColor.RED + "Tablist Broadcasting is enabled in the config, but you are running 1.7 or lower. Adjusting that value.", JLogger.LogLevel.MINIMAL);
                     enabled = false;
                 }
                 break;
             case "Subtitle":
                 if(enabled && !ReflectionAPI.verBiggerThan(1, 8)) {
-                    ((Main) this.storage.getPlugin()).getjLogger().log(ChatColor.RED + "Subtitle Broadcasting is enabled in the config, but you are running 1.7 or lower. Adjusting that value.", JLogger.LogLevel.MINIMAL);
+                    this.storage.getPlugin().getjLogger().log(ChatColor.RED + "Subtitle Broadcasting is enabled in the config, but you are running 1.7 or lower. Adjusting that value.", JLogger.LogLevel.MINIMAL);
                     enabled = false;
                 }
                 break;

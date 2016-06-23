@@ -21,7 +21,6 @@ public final class Signs extends BroadcasterConfig {
     protected SignsBroadcaster getBroadcasterByIdentifier(String identifier) {
         String path = "SignsBroadcasters." + identifier + '.';
         return new SignsBroadcaster(
-                (Main) this.getStorage().getPlugin(),
                 identifier,
                 this.config.getBoolean(path + "Random"),
                 this.config.getInt(path + "Interval"),

@@ -1,6 +1,5 @@
 package com.j0ach1mmall3.freeautomessage.api;
 
-import com.j0ach1mmall3.freeautomessage.Main;
 import com.j0ach1mmall3.jlib.integration.Placeholders;
 import com.j0ach1mmall3.jlib.methods.Parsing;
 import org.bukkit.Bukkit;
@@ -20,8 +19,8 @@ import java.util.Map;
 public final class BossbarBroadcaster extends WorldsBroadcaster {
     private final Map<Player, BossBar> previous = new HashMap<>();
 
-    public BossbarBroadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages, String permission, List<String> enabledWorlds) {
-        super(plugin, identifier, random, interval, messages, permission, enabledWorlds);
+    public BossbarBroadcaster(String identifier, boolean random, int interval, List<String> messages, String permission, List<String> enabledWorlds) {
+        super(identifier, random, interval, messages, permission, enabledWorlds);
     }
 
     @Override

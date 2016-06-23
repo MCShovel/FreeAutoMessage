@@ -17,7 +17,6 @@ public final class Bossbar extends BroadcasterConfig {
     protected Broadcaster getBroadcasterByIdentifier(String identifier) {
         String path = "BossbarBroadcasters." + identifier + '.';
         return new BossbarBroadcaster(
-                (Main) this.getStorage().getPlugin(),
                 identifier,
                 this.config.getBoolean(path + "Random"),
                 this.config.getInt(path + "Interval"),

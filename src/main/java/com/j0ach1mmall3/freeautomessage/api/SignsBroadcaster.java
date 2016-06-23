@@ -1,6 +1,5 @@
 package com.j0ach1mmall3.freeautomessage.api;
 
-import com.j0ach1mmall3.freeautomessage.Main;
 import com.j0ach1mmall3.jlib.integration.Placeholders;
 import com.j0ach1mmall3.jlib.methods.Parsing;
 import org.bukkit.Bukkit;
@@ -19,13 +18,13 @@ public final class SignsBroadcaster extends PlayerBroadcaster {
 
     private final List<String> signs;
 
-    public SignsBroadcaster(Main plugin, String identifier, boolean random, int interval, List<String> messages, String permission, List<String> signs) {
-        super(plugin, identifier, random, interval, messages, permission);
+    public SignsBroadcaster(String identifier, boolean random, int interval, List<String> messages, String permission, List<String> signs) {
+        super(identifier, random, interval, messages, permission);
         this.signs = signs;
     }
 
     @Override
-    protected void broadcastInternal(Player p, String message) {
+    protected void broadcast(Player p, String message) {
         for(String s : this.signs) {
             if(this.getWorld(s) == null) continue;
             p.sendSignChange(this.deserializeLocation(s), CLEAR);

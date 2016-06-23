@@ -16,7 +16,6 @@ public final class Command extends BroadcasterConfig {
     protected CommandBroadcaster getBroadcasterByIdentifier(String identifier) {
         String path = "CommandBroadcasters." + identifier + '.';
         return new CommandBroadcaster(
-                (Main) this.getStorage().getPlugin(),
                 identifier,
                 this.config.getBoolean(path + "Random"),
                 this.config.getInt(path + "Interval"),
