@@ -11,7 +11,7 @@ import java.util.List;
 public abstract class WorldsBroadcaster extends PlayerBroadcaster {
     private final List<String> enabledWorlds;
 
-    public WorldsBroadcaster(String identifier, boolean random, int interval, List<String> messages, String permission, List<String> enabledWorlds) {
+    protected WorldsBroadcaster(String identifier, boolean random, int interval, List<String> messages, String permission, List<String> enabledWorlds) {
         super(identifier, random, interval, messages, permission);
         this.enabledWorlds = enabledWorlds;
     }

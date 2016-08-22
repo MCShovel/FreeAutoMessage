@@ -17,7 +17,7 @@ public abstract class Broadcaster implements Runnable {
     private final List<String> messages;
     private int count;
 
-    public Broadcaster(String identifier, boolean random, int interval, List<String> messages) {
+    protected Broadcaster(String identifier, boolean random, int interval, List<String> messages) {
         this.identifier = identifier;
         this.random = random;
         this.interval = interval;
@@ -49,7 +49,7 @@ public abstract class Broadcaster implements Runnable {
             id = this.count;
             this.count++;
         }
-        this.broadcast(this.messages.get(id));
+        if(this.messages.get(id) != null && !this.messages.get(id).isEmpty()) this.broadcast(this.messages.get(id));
     }
 
     public final void start(Plugin plugin) {

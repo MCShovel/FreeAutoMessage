@@ -10,7 +10,6 @@ before_deploy:
   - export GIT_TAG=Build-$TRAVIS_BUILD_NUMBER
   - git tag $GIT_TAG -a -m "FreeAutoMessage automated build $TRAVIS_BUILD_NUMBER"
   - git push -q https://$TAGPERM@github.com/j0ach1mmall3/FreeAutoMessage --tags
-  - ls -R
 deploy:
   provider: releases
   api_key: $TAGPERM

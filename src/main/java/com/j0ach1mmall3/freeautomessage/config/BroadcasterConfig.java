@@ -18,7 +18,7 @@ public abstract class BroadcasterConfig extends ConfigLoader<Main> {
     private final boolean enabled;
     protected final List<Broadcaster> broadcasters;
 
-    public BroadcasterConfig(String config, Main plugin, String broadcaster) {
+    protected BroadcasterConfig(String config, Main plugin, String broadcaster) {
         super(config, plugin);
         this.enabled = this.getEnabled(broadcaster);
         this.broadcasters = this.getBroadcasters(broadcaster);

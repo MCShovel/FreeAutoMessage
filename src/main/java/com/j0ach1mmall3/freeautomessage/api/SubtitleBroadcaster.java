@@ -1,7 +1,6 @@
 package com.j0ach1mmall3.freeautomessage.api;
 
 import com.j0ach1mmall3.jlib.visual.Subtitle;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.List;

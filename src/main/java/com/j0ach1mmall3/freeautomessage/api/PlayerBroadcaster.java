@@ -12,7 +12,7 @@ import java.util.List;
 public abstract class PlayerBroadcaster extends Broadcaster {
     protected final String permission;
 
-    public PlayerBroadcaster(String identifier, boolean random, int interval, List<String> messages, String permission) {
+    protected PlayerBroadcaster(String identifier, boolean random, int interval, List<String> messages, String permission) {
         super(identifier, random, interval, messages);
         this.permission = permission;
     }
